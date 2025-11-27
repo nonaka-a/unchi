@@ -1,0 +1,48 @@
+/* グローバルコントロールのスタイル */
+#global-controls {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 5px 15px;
+    border-radius: 30px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(5px);
+}
+
+.control-btn {
+    background: var(--brown);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.1s, background-color 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.control-btn:hover {
+    transform: scale(1.1);
+    background-color: var(--dark-brown);
+}
+
+.control-btn:active {
+    transform: scale(0.95);
+}
+
+/* 古いサウンドトグルのスタイルを上書き/削除するための調整 */
+/* #sound-toggle の固定配置スタイルは削除済みと仮定、またはここで無効化 */
+#sound-toggle {
+    position: static;
+    /* 固定配置を解除 */
+    /* 他のスタイルは .control-btn で適用 */
+}

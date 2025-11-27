@@ -1,0 +1,997 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap');
+
+:root {
+    --bg-color: #f0e6d2;
+    --container-bg: #fff8e1;
+    --text-color: #5c3c20;
+    --brown: #795548;
+    --dark-brown: #5d4037
+}
+
+body {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    margin: 0;
+    overflow: hidden
+}
+
+.main-wrapper {
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+#start-screen,
+#game-container,
+#zukan-container,
+#shinken-container,
+#explosion-container {
+    background-color: var(--container-bg);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .1);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.start-poop-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    height: 100px;
+}
+
+.mini-poop {
+    font-size: 60px;
+    animation: bounce 2s infinite ease-in-out;
+}
+
+.mini-poop:nth-child(odd) {
+    animation-duration: 2.2s;
+}
+
+.mini-poop:nth-child(even) {
+    animation-duration: 1.8s;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.start-button,
+.play-again-button,
+.zukan-button {
+    display: block;
+    margin: 10px auto;
+    color: #fff;
+    border: none;
+    padding: 15px 30px;
+    font-size: 20px;
+    font-family: inherit;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, .1);
+    transition: background-color .3s, transform .1s;
+    width: auto;
+    min-width: 200px;
+    box-sizing: border-box
+}
+
+.start-button {
+    background-color: var(--brown)
+}
+
+.start-button:hover {
+    background-color: var(--dark-brown)
+}
+
+.zukan-button {
+    background-color: #4caf50
+}
+
+.zukan-button:hover {
+    background-color: #388e3c
+}
+
+.play-again-button {
+    background-color: var(--brown)
+}
+
+.play-again-button:hover {
+    background-color: var(--dark-brown)
+}
+
+.start-button:active,
+.play-again-button:active,
+.zukan-button:active {
+    transform: translateY(2px)
+}
+
+#game-container,
+#zukan-container,
+#shinken-container,
+#explosion-container {
+    display: none;
+    position: relative
+}
+
+h1 {
+    color: #8d6e63;
+    margin-top: 0;
+    margin-bottom: 10px
+}
+
+.park-title {
+    font-size: 56px;
+    font-weight: 900;
+    color: #ff9800;
+    text-shadow:
+        4px 4px 0 #fff,
+        7px 7px 0 #795548;
+    letter-spacing: 2px;
+    background: none;
+    -webkit-text-fill-color: initial;
+
+    filter: drop-shadow(3px 3px 0px #fff) drop-shadow(5px 5px 0px rgba(0, 0, 0, 0.2));
+    animation: pop-title 2s infinite ease-in-out;
+    margin-bottom: 30px;
+    -webkit-text-stroke: 2px #fff;
+}
+
+@keyframes pop-title {
+
+    0%,
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
+
+    50% {
+        transform: scale(1.1) rotate(-2deg);
+    }
+}
+
+.gacha-machine-container {
+    position: relative;
+    width: 250px;
+    height: 350px;
+    margin: 0 auto
+}
+
+#gacha-machine-svg {
+    width: 100%;
+    height: 100%;
+    transition: transform .2s
+}
+
+#gacha-machine-svg.shake {
+    animation: shake .5s
+}
+
+#gacha-handle {
+    cursor: pointer;
+    transition: transform .3s ease-in-out
+}
+
+#gacha-handle:hover {
+    transform-origin: 50% 50%;
+    transform: scale(1.1)
+}
+
+#gacha-handle.rotate {
+    animation: rotate-handle .5s ease-in-out
+}
+
+#capsule {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(180deg, #ffeb3b, #fbc02d);
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    bottom: 50px;
+    margin-left: -25px;
+    display: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
+    border: 2px solid rgba(255, 255, 255, .5)
+}
+
+#capsule.drop {
+    display: block;
+    animation: drop-capsule .8s cubic-bezier(.68, -.55, .27, 1.55) forwards
+}
+
+#capsule.openable {
+    cursor: pointer;
+    animation: pulse 1.5s infinite
+}
+
+#result-view {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: fade-in .5s
+}
+
+.poop-display,
+.zukan-poop-icon {
+    position: relative;
+}
+
+.poop-display {
+    font-size: 100px;
+    margin: 20px 0;
+    animation: pop-in .5s cubic-bezier(.68, -.55, .27, 1.55)
+}
+
+#poop-name {
+    font-size: 22px
+}
+
+#fortune-text {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 10px 0
+}
+
+#fortune-message {
+    font-size: 16px;
+    min-height: 40px
+}
+
+.fortune-daikichi {
+    color: #ff4500
+}
+
+.fortune-kichi {
+    color: #228b22
+}
+
+.fortune-chukichi {
+    color: #4682b4
+}
+
+.fortune-shokichi {
+    color: #6a5acd
+}
+
+.fortune-kyo {
+    color: #808080
+}
+
+#back-to-title-button {
+    position: absolute;
+    bottom: 15px;
+    background: var(--brown);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10
+}
+
+
+
+#back-to-title-button {
+    left: 15px
+}
+
+#zukan-container {
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#zukan-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.zukan-item {
+    background-color: #fff;
+    border: 2px solid var(--bg-color);
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.zukan-poop-icon {
+    font-size: 60px;
+    margin-bottom: 10px;
+    height: 60px;
+    width: 60px
+}
+
+.zukan-poop-name {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 5px
+}
+
+.zukan-poop-message {
+    font-size: 14px;
+    margin: 0;
+    color: #6d4c41
+}
+
+@media (min-width:600px) {
+    #zukan-grid {
+        grid-template-columns: repeat(2, 1fr)
+    }
+}
+
+.sparkle-effect::before,
+.sparkle-effect::after {
+    content: "✨";
+    position: absolute;
+    display: block;
+    opacity: 0;
+    animation: sparkle-anim 1.2s ease-out infinite;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.sparkle-effect::before {
+    font-size: 25%;
+    top: 10%;
+    left: 80%;
+    animation-delay: 0.1s;
+}
+
+.sparkle-effect::after {
+    font-size: 30%;
+    top: 80%;
+    left: 10%;
+    animation-delay: 0.6s;
+}
+
+@keyframes sparkle-anim {
+    0% {
+        transform: translateY(0px) scale(0);
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-40px) scale(1.5);
+        opacity: 0;
+    }
+}
+
+.zukan-poop-icon.sparkle-effect::before,
+.zukan-poop-icon.sparkle-effect::after {
+    animation-name: sparkle-anim-small;
+}
+
+@keyframes sparkle-anim-small {
+    0% {
+        transform: translateY(0px) scale(0);
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-20px) scale(1.5);
+        opacity: 0;
+    }
+}
+
+@keyframes shake {
+
+    0%,
+    to {
+        transform: translateX(0)
+    }
+
+    25% {
+        transform: translateX(-5px) rotate(-2deg)
+    }
+
+    75% {
+        transform: translateX(5px) rotate(2deg)
+    }
+}
+
+@keyframes rotate-handle {
+    to {
+        transform: rotate(360deg)
+    }
+}
+
+@keyframes drop-capsule {
+    0% {
+        transform: translateY(-250px);
+        opacity: 1
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    to {
+        transform: scale(1);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, .2)
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(251, 192, 45, .7)
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes pop-in {
+    0% {
+        transform: scale(0)
+    }
+
+    to {
+        transform: scale(1)
+    }
+}
+
+/* しんけんしらうんちどり用のスタイル */
+#shinken-field {
+    position: relative;
+    height: 250px;
+    background: #e0f7fa;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    border: 4px solid #b2ebf2;
+}
+
+#shinken-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: bold;
+    color: #00bcd4;
+    z-index: 5;
+    text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+    width: 100%;
+}
+
+#white-poop {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 80px;
+    color: white;
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
+    z-index: 2;
+}
+
+#catcher-hands {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 70px;
+    z-index: 3;
+    white-space: nowrap;
+}
+
+.u-button {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #ff5722;
+    color: white;
+    font-size: 36px;
+    font-weight: bold;
+    border: none;
+    box-shadow: 0 6px 0 #e64a19, 0 10px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#difficulty-selector {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.diff-btn {
+    background-color: #ddd;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 16px;
+    color: #555;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.diff-btn:hover {
+    background-color: #ccc;
+}
+
+.diff-btn.selected {
+    background-color: #ff9800;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#back-to-title-from-shinken {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: var(--brown);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+/* うんち だいばくはつ用のスタイル */
+#explosion-container {
+    display: none;
+    height: 90vh;
+    position: relative;
+    overflow: hidden;
+}
+
+#back-to-title-from-explosion {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: var(--brown);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.explosion-header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.explosion-info,
+.explosion-timer {
+    font-size: 20px;
+    font-weight: bold;
+    color: #d84315;
+}
+
+#explosion-timer-value {
+    font-size: 24px;
+}
+
+#explosion-field {
+    position: relative;
+    width: 100%;
+    height: 55vh;
+    background: linear-gradient(to bottom, #87CEEB 0%, #fff8e1 100%);
+    border-radius: 10px;
+    border: 4px solid #ffcc80;
+    overflow: hidden;
+    margin: 0 auto 10px;
+}
+
+#volcano-svg {
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 150px;
+    z-index: 10;
+    pointer-events: none;
+    transition: transform 0.05s;
+}
+
+#volcano-svg.bump {
+    transform: translateX(-50%) scale(1.05);
+}
+
+.flying-poop {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    font-size: 80px;
+    pointer-events: none;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center center;
+}
+
+#explosion-result-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.result-box {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 20px;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    animation: pop-in 0.3s;
+}
+
+.final-score-text {
+    font-size: 32px;
+    font-weight: bold;
+    color: #d32f2f;
+    margin: 10px 0;
+}
+
+#player-name-input {
+    font-size: 20px;
+    padding: 10px;
+    width: 80%;
+    margin-bottom: 15px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#ranking-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    max-height: 200px;
+    overflow-y: auto;
+    text-align: left;
+}
+
+#ranking-list li {
+    padding: 5px 10px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+}
+
+.rank-num {
+    font-weight: bold;
+    color: #ff9800;
+    width: 50px;
+}
+
+.rank-name {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.rank-score {
+    font-weight: bold;
+    color: #5d4037;
+}
+
+/* デカうんちへのみち用のスタイル */
+#deka-unchi-selection {
+    display: none;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+#deka-selection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.deka-selection-item {
+    background-color: #fff;
+    border: 2px solid var(--bg-color);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.deka-selection-item:hover {
+    transform: scale(1.05);
+    border-color: #9c27b0;
+}
+
+.deka-selection-icon {
+    font-size: 50px;
+    margin-bottom: 5px;
+}
+
+#deka-unchi-game {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* 背景色をベージュに変更 */
+    background-color: var(--bg-color);
+    z-index: 100;
+}
+
+#deka-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+#back-to-title-from-deka {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: var(--brown);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 110;
+}
+
+/* --- メニューボタンのグリッド配置 --- */
+.menu-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* 1行に2つ（同じ幅） */
+    gap: 15px;
+    /* ボタン同士の間隔 */
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* グリッド内のボタン調整 */
+.menu-grid .start-button,
+.menu-grid .zukan-button {
+    width: 100%;
+    /* 横幅を親要素（セル）に合わせる */
+    min-width: 0;
+    /* グリッド内での幅崩れ防止 */
+    margin: 0;
+    /* 個別のマージンを削除 */
+    height: 100%;
+    /* 高さを揃える */
+    min-height: 60px;
+    /* 最低限の高さを確保 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    /* 内側の余白調整 */
+    box-sizing: border-box;
+}
+
+/* ボタンが奇数個の場合、最後の1つを横幅いっぱいに広げる */
+.menu-grid>button:last-child:nth-child(odd) {
+    grid-column: span 2;
+}
+
+/* スマホなど画面が狭いときは1列に戻す */
+@media (max-width: 480px) {
+    .menu-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .menu-grid>button:last-child:nth-child(odd) {
+        grid-column: auto;
+    }
+}
+
+#deka-game-over-overlay,
+#deka-pause-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#deka-game-over-overlay .result-box,
+#deka-pause-overlay .result-box {
+    animation: pop-in 0.3s;
+}
+
+#deka-game-over-overlay h2,
+#deka-pause-overlay h2 {
+    color: #d32f2f;
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+/* クリア画面用 */
+#deka-game-clear-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    /* 明るめの背景 */
+    z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#deka-game-clear-overlay .result-box {
+    animation: pop-in 0.5s;
+    border: 5px solid #FFD700;
+    background-color: #fffde7;
+}
+
+/* デカうんち ランキング表示 */
+#deka-ranking-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 200px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 105;
+    /* ボタンより下、キャンバスより上 */
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+    /* ゲーム操作の邪魔にならないように */
+}
+
+.deka-rank-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #5d4037;
+    text-align: center;
+    margin-bottom: 5px;
+    border-bottom: 2px solid #795548;
+}
+
+.deka-rank-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.deka-rank-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 8px;
+    margin-bottom: 2px;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+/* プレイヤー用の座布団スタイル */
+.deka-rank-item.player-rank {
+    background-color: #fff176;
+    /* 金色の座布団 */
+    border: 2px solid #ff9800;
+    font-weight: bold;
+    transform: scale(1.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.rank-order {
+    width: 20px;
+    font-weight: bold;
+    color: #d84315;
+}
+
+.rank-name {
+    flex-grow: 1;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0 5px;
+}
+
+.rank-size {
+    color: #555;
+    font-size: 12px;
+}

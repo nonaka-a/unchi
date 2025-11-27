@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>うんちパーク</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="controls.css">
+</head>
+
+<body>
+
+    <div id="global-controls">
+        <button id="zoom-in-btn" class="control-btn" title="ズームイン">➕</button>
+        <button id="zoom-out-btn" class="control-btn" title="ズームアウト">➖</button>
+        <button id="fullscreen-btn" class="control-btn" title="フルスクリーン">⛶</button>
+        <button id="sound-toggle" class="control-btn" title="サウンド">♪</button>
+    </div>
+
+    <div class="main-wrapper">
+        <div id="start-screen">
+            <h1 class="park-title">💩うんちパーク💩</h1>
+            <div id="start-poop-container" class="start-poop-container"></div>
+
+            <div class="menu-grid">
+                <button id="start-button" class="start-button">うんち うらない ガチャ</button>
+                <button id="shinken-button" class="start-button" style="background-color: #d32f2f;">しんけん
+                    しらうんちどり</button>
+                <button id="explosion-button" class="start-button" style="background-color: #ff9800;">うんち
+                    だいばくはつ</button>
+                <button id="deka-unchi-button" class="start-button" style="background-color: #9c27b0;">デカうんち
+                    へのみち</button>
+                <button id="zukan-button" class="zukan-button">うんち ずかん</button>
+            </div>
+        </div>
+
+        <div id="game-container">
+            <button id="back-to-title-button">↩</button>
+            <div id="gacha-view">
+                <h1>うんち うらない ガチャ</h1>
+                <div class="gacha-machine-container">
+                    <svg id="gacha-machine-svg" viewBox="0 0 100 140"></svg>
+                    <div id="capsule"></div>
+                </div>
+            </div>
+            <div id="result-view">
+                <div id="poop-display" class="poop-display"></div>
+                <h2 id="poop-name"></h2>
+                <p id="fortune-text"></p>
+                <p id="fortune-message"></p>
+                <button id="play-again-button" class="play-again-button">もう 一ど うらなう</button>
+            </div>
+        </div>
+
+        <div id="shinken-container">
+            <button id="back-to-title-from-shinken">↩</button>
+            <h1>しんけん しらうんちどり</h1>
+            <div id="shinken-field">
+                <div id="shinken-message">スタートをおしてね</div>
+                <div id="white-poop"></div>
+                <div id="catcher-hands">👐</div>
+            </div>
+            <p>うんちが みえたら Uボタン！</p>
+            <button id="shinken-start-btn" class="start-button">スタート</button>
+
+            <button id="shinken-action-btn" class="u-button" style="display: none;">U</button>
+
+            <div id="difficulty-selector">
+                <button class="diff-btn" data-speed="0.8">ゆっくり</button>
+                <button class="diff-btn" data-speed="0.5">ふつう</button>
+                <button class="diff-btn selected" data-speed="0.3">はやい</button>
+            </div>
+        </div>
+
+        <div id="explosion-container">
+            <button id="back-to-title-from-explosion">↩</button>
+            <h1>うんち だいばくはつ</h1>
+            <div class="explosion-header">
+                <div class="explosion-info">
+                    とびだした数: <span id="explosion-counter-value">0</span> こ
+                </div>
+                <div class="explosion-timer">
+                    のこり時間: <span id="explosion-timer-value">30</span> 秒
+                </div>
+            </div>
+
+            <div id="explosion-field">
+                <svg id="volcano-svg" viewBox="0 0 200 100" preserveAspectRatio="none">
+                    <path d="M20,100 L60,20 L140,20 L180,100 Z" fill="#795548" stroke="#5d4037" stroke-width="3" />
+                    <ellipse cx="100" cy="20" rx="40" ry="10" fill="#3e2723" />
+                    <ellipse cx="100" cy="20" rx="25" ry="6" fill="#ff5722" />
+                    <path d="M40,60 L60,40 M160,60 L140,40 M100,30 L100,80" stroke="#5d4037" stroke-width="2"
+                        opacity="0.5" />
+                </svg>
+            </div>
+            <p>キーボードを レン打して<br>うんちを ふんか させよう！</p>
+
+            <div id="explosion-result-overlay">
+                <div class="result-box">
+                    <h2>しゅうりょう！</h2>
+                    <p class="final-score-text">きろく: <span id="final-score">0</span> こ</p>
+
+                    <div id="ranking-input-section">
+                        <p>なまえを いれてね</p>
+                        <input type="text" id="player-name-input" maxlength="8" placeholder="なまえ">
+                        <button id="register-rank-button" class="start-button">とうろく</button>
+                        <button id="skip-rank-button" class="start-button"
+                            style="background-color: #999; margin-top: 10px;">とうろくしない</button>
+                    </div>
+
+                    <div id="ranking-display-section" style="display: none;">
+                        <h3>🏆 ランキング 🏆</h3>
+                        <ul id="ranking-list"></ul>
+                        <button id="play-again-from-rank" class="play-again-button">もういちど</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="deka-unchi-selection" style="display: none;">
+            <h1>キャラを えらんでね</h1>
+            <div id="deka-selection-grid"></div>
+        </div>
+
+        <div id="deka-difficulty-selection" style="display: none;">
+            <h1>なんいどを えらんでね</h1>
+            <div class="menu-grid">
+                <button id="deka-easy-btn" class="start-button" style="background-color: #4CAF50;">かんたん</button>
+                <button id="deka-hard-btn" class="start-button" style="background-color: #f44336;">むずかしい</button>
+            </div>
+            <button id="back-to-char-select" class="play-again-button">もどる</button>
+        </div>
+
+        <div id="zukan-container">
+            <h1>うんち ずかん</h1>
+            <div id="zukan-grid"></div>
+            <button id="back-to-game-button" class="play-again-button">もどる</button>
+        </div>
+
+        <div id="deka-unchi-game" style="display: none;">
+            <button id="back-to-title-from-deka">↩</button>
+            <div id="deka-ranking-container"></div>
+            <canvas id="deka-canvas"></canvas>
+
+            <!-- ポーズ画面（追加） -->
+            <div id="deka-pause-overlay" style="display: none;">
+                <div class="result-box">
+                    <h2>ちゅうだん</h2>
+                    <p class="final-score-text">いまの大きさ: <span id="deka-pause-score">0</span></p>
+                    <button id="deka-resume-button" class="play-again-button">つづける</button>
+                    <button id="deka-quit-button" class="start-button" style="background-color: #795548;">タイトルへ</button>
+                </div>
+            </div>
+
+            <!-- ゲームオーバー画面 -->
+            <div id="deka-game-over-overlay" style="display: none;">
+                <div class="result-box">
+                    <h2>食べられちゃった！</h2>
+                    <p class="final-score-text">さいしゅうサイズ: <span id="deka-final-score">0</span></p>
+                    <button id="deka-retry-button" class="play-again-button">もういちど</button>
+                    <button id="deka-title-button" class="start-button"
+                        style="background-color: #795548;">タイトルへ</button>
+                </div>
+            </div>
+
+            <!-- クリア画面 -->
+            <div id="deka-game-clear-overlay" style="display: none;">
+                <div class="result-box">
+                    <h2 style="color: #FFD700; text-shadow: 2px 2px 0 #000;">🎊クリアおめでとう！🎊</h2>
+                    <p style="font-size: 24px; font-weight: bold;">でかうんちマスターだ！</p>
+                    <button id="deka-clear-title-button" class="start-button">タイトルへ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <audio id="bgm-sound" src="audio/bgm.mp3" loop></audio>
+    <audio id="turn-sound" src="audio/turn.mp3"></audio>
+    <audio id="drop-sound" src="audio/drop.mp3"></audio>
+    <audio id="reveal-sound" src="audio/reveal.mp3"></audio>
+
+    <script src="data.js"></script>
+    <script src="utils.js"></script>
+    <script src="gacha.js"></script>
+    <script src="shinken.js"></script>
+    <script src="explosion.js"></script>
+    <script src="deka_unchi.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
