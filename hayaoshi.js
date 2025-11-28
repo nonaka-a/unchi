@@ -41,16 +41,16 @@ function initHayaoshi() {
     };
     const MAX_LEVEL = 4;
     const TIME_LIMIT = 15; // 制限時間（秒）
-    const SCORE_THRESHOLD = 20; // 15秒経過時に必要なスコア
+    const SCORE_THRESHOLD = 20; // 各レベルで必要なスコア
     const MAX_MISS = 5; // おてつき許容回数
 
     let gameState = {
-        score: 0,           // 現在の正解数（累計）
-        levelStartScore: 0, // レベル開始時点のスコア（リトライ用）
-        miss: 0,            // おてつき数（レベルごとにリセット）
-        level: 1,           // 現在のレベル
+        totalScore: 0,        // 確定した過去レベルの合計スコア
+        currentLevelScore: 0, // 現在プレイ中のレベルのスコア
+        miss: 0,
+        level: 1,
         timeLeft: TIME_LIMIT,
-        lastSec: TIME_LIMIT, // カウントダウンSE用
+        lastSec: TIME_LIMIT,
         isPlaying: false,
         activePoopIndex: -1,
         timerInterval: null
@@ -62,7 +62,7 @@ function initHayaoshi() {
         hayaoshiButton.addEventListener("click", () => {
             startScreen.style.display = "none";
             hayaoshiContainer.style.display = "flex";
-            startNewGame(); // 最初からスタート
+            startNewGame();
         });
     }
 
@@ -70,15 +70,15 @@ function initHayaoshi() {
         backButton.addEventListener("click", backToTitle);
     }
 
-    // 次のレベルへ
     if (nextLevelBtn) {
         nextLevelBtn.addEventListener("click", () => {
             resultOverlay.style.display = "none";
+            // クリアしたので現在のスコアを合計に確定させて次へ
+            gameState.totalScore += gameState.currentLevelScore;
             startLevel(gameState.level + 1);
         });
     }
 
-    // もういちど
     if (retryBtn) {
         retryBtn.addEventListener("click", () => {
             resultOverlay.style.display = "none";
@@ -86,7 +86,6 @@ function initHayaoshi() {
         });
     }
 
-    // さいしょから
     if (restartBtn) {
         restartBtn.addEventListener("click", () => {
             resultOverlay.style.display = "none";
@@ -110,17 +109,16 @@ function initHayaoshi() {
     }
 
     function startNewGame() {
-        gameState.score = 0;
+        gameState.totalScore = 0;
         startLevel(1);
     }
 
     function startLevel(level) {
         if (level > MAX_LEVEL) level = MAX_LEVEL;
         
-        // 状態設定
         gameState.level = level;
+        gameState.currentLevelScore = 0; // 新しいレベルなので0から
         gameState.miss = 0; 
-        gameState.levelStartScore = gameState.score;
         gameState.timeLeft = TIME_LIMIT;
         gameState.lastSec = TIME_LIMIT;
         gameState.isPlaying = false;
@@ -128,22 +126,20 @@ function initHayaoshi() {
 
         updateUI();
 
-        // ボタン表示リセット
         if (nextLevelBtn) nextLevelBtn.style.display = "none";
         if (retryBtn) retryBtn.style.display = "none";
 
-        // Grid描画
         renderGrid();
         showLevelStart();
     }
 
     function retryLevel() {
-        gameState.score = gameState.levelStartScore;
+        // リトライ時は totalScore はそのままで、現在のレベルをやり直す
         startLevel(gameState.level);
     }
 
     function updateUI() {
-        if (scoreDisplay) scoreDisplay.textContent = gameState.score;
+        if (scoreDisplay) scoreDisplay.textContent = gameState.currentLevelScore;
         if (missDisplay) missDisplay.textContent = "0 / " + MAX_MISS;
         if (levelDisplay) levelDisplay.textContent = gameState.level;
         if (timerDisplay) timerDisplay.textContent = TIME_LIMIT;
@@ -237,13 +233,11 @@ function initHayaoshi() {
             
             if (timerDisplay) timerDisplay.textContent = currentSec;
 
-            // 残り3秒カウントダウン
             if (currentSec < gameState.lastSec && currentSec <= 3 && currentSec > 0) {
                 playBeepSound();
             }
             gameState.lastSec = currentSec;
 
-            // 時間切れ判定
             if (remaining <= 0) {
                 checkWinCondition();
             }
@@ -277,10 +271,6 @@ function initHayaoshi() {
 
             timeoutId = setTimeout(() => {
                 if (gameState.isPlaying && gameState.activePoopIndex === nextIndex) {
-                    // ★変更: 時間経過による移動は「おてつき」にカウントしない
-                    // handleMiss(items[nextIndex]); ← 削除
-                    
-                    // 次の場所へ移動するだけ
                     activateRandomPoop();
                 }
             }, duration);
@@ -291,17 +281,11 @@ function initHayaoshi() {
         if (!gameState.isPlaying) return;
 
         if (index === gameState.activePoopIndex) {
-            // 正解
-            gameState.score++;
-            
-            if (scoreDisplay) scoreDisplay.textContent = gameState.score;
+            gameState.currentLevelScore++;
+            if (scoreDisplay) scoreDisplay.textContent = gameState.currentLevelScore;
             playSound("catch-sound"); 
-
-            // 次へ（クリックした場合は即座に次へ）
             activateRandomPoop();
-
         } else {
-            // お手つき
             handleMiss(element);
         }
     }
@@ -309,13 +293,11 @@ function initHayaoshi() {
     function handleMiss(element) {
         gameState.miss++;
         if (missDisplay) missDisplay.textContent = gameState.miss + " / " + MAX_MISS;
-        
         playSound("incorrect-sound");
 
         element.classList.add("wrong");
         setTimeout(() => element.classList.remove("wrong"), 300);
 
-        // ★変更: 5回お手つきでゲームオーバー
         if (gameState.miss >= MAX_MISS) {
             gameOver("miss_limit");
         }
@@ -331,10 +313,8 @@ function initHayaoshi() {
         if (bgm) bgm.pause();
     }
 
-    // 時間切れ時の判定
     function checkWinCondition() {
-        // ★変更: 15秒経過時に20点以上かどうかチェック
-        if (gameState.score >= SCORE_THRESHOLD) {
+        if (gameState.currentLevelScore >= SCORE_THRESHOLD) {
             levelClear();
         } else {
             gameOver("score_low");
@@ -351,8 +331,11 @@ function initHayaoshi() {
                 resultTitle.textContent = "クリア！";
                 resultTitle.style.color = "#FFD700"; 
             }
+            
+            // クリア時は「そのレベルのスコア」を表示
+            // まだ合計には加算していない（次のレベルへ進むボタンを押した時に加算）
             if (finalScoreSpan) {
-                finalScoreSpan.textContent = gameState.score;
+                finalScoreSpan.textContent = "スコア: " + gameState.currentLevelScore;
             }
 
             if (gameState.level < MAX_LEVEL) {
@@ -361,7 +344,14 @@ function initHayaoshi() {
                     nextLevelBtn.textContent = "レベル " + (gameState.level + 1) + " へ";
                 }
             } else {
+                // 全クリ時はその場で合算して表示
+                gameState.totalScore += gameState.currentLevelScore;
                 if (resultTitle) resultTitle.textContent = "ぜんくりあ！";
+                if (finalScoreSpan) {
+                    finalScoreSpan.textContent = "ごうけい: " + gameState.totalScore;
+                }
+                // 次へボタンは出さない
+                if (nextLevelBtn) nextLevelBtn.style.display = "none";
             }
             
             if (restartBtn) restartBtn.style.display = "block";
@@ -373,12 +363,17 @@ function initHayaoshi() {
     function gameOver(reason) {
         stopGame();
 
+        // ゲームオーバー時は、今までの合計 + 今回のレベルのスコアを表示
+        const currentTotal = gameState.totalScore + gameState.currentLevelScore;
+
         if (resultOverlay) {
             resultOverlay.style.display = "flex";
-            if (finalScoreSpan) finalScoreSpan.textContent = gameState.score;
+            
+            if (finalScoreSpan) {
+                finalScoreSpan.textContent = "ごうけい: " + currentTotal;
+            }
 
             if (resultTitle) {
-                // 理由に応じてメッセージを変える（任意）
                 if (reason === "score_low") {
                     resultTitle.textContent = "スコア不足...";
                 } else {
