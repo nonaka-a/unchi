@@ -126,6 +126,35 @@ body {
     transform: translateY(2px)
 }
 
+/* トップ画面の各ゲームボタンの色設定 (HTMLのinline styleを廃止) */
+#shinken-button {
+    background-color: #d32f2f;
+}
+#shinken-button:hover {
+    background-color: #b71c1c;
+}
+
+#explosion-button {
+    background-color: #ff9800;
+}
+#explosion-button:hover {
+    background-color: #f57c00;
+}
+
+#hayaoshi-button {
+    background-color: #03A9F4;
+}
+#hayaoshi-button:hover {
+    background-color: #0288d1;
+}
+
+#deka-unchi-button {
+    background-color: #9c27b0;
+}
+#deka-unchi-button:hover {
+    background-color: #7b1fa2;
+}
+
 #game-container,
 #zukan-container,
 #shinken-container,
@@ -800,7 +829,7 @@ h1 {
     width: 100%;
     height: 100%;
     z-index: 1000;
-    background-color: #f0f0f0;
+    background-color: var(--container-bg); /* ベージュに変更 */
     display: none;
 }
 
