@@ -5,7 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     initGacha();
     initShinken();
     initExplosion();
-    initDekaUnchi(); // 追加
+    initDekaUnchi();
+    initHayaoshi(); // 追加
 
     // トップ画面のうんち表示
     const startPoopContainer = document.getElementById("start-poop-container");

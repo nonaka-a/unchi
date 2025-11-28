@@ -64,12 +64,13 @@ function initExplosion() {
         countdownDisplay.style.display = "block";
         let count = 3;
         countdownDisplay.textContent = count;
+        playBeepSound();
 
         const countInterval = setInterval(() => {
             count--;
             if (count > 0) {
                 countdownDisplay.textContent = count;
-                // 軽く音を鳴らしてもよい
+                playBeepSound();
             } else if (count === 0) {
                 countdownDisplay.textContent = "スタート!";
             } else {
@@ -119,6 +120,7 @@ function initExplosion() {
     function finishGame() {
         isActive = false;
         clearInterval(timerInterval);
+        playSound("timeup-sound");
 
         // 結果表示
         finalScoreDisplay.textContent = totalCount;
@@ -306,4 +308,14 @@ function initExplosion() {
     }
 
     playAgainFromRankButton.addEventListener("click", startCountdown); // 変更: もう一度遊ぶ時もカウントダウン
+
+    const titleFromRankButton = document.getElementById("title-from-rank");
+    if (titleFromRankButton) {
+        titleFromRankButton.addEventListener("click", () => {
+            isActive = false;
+            clearInterval(timerInterval);
+            explosionContainer.style.display = "none";
+            startScreen.style.display = "block";
+        });
+    }
 }

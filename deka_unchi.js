@@ -659,14 +659,14 @@ function initDekaUnchi() {
     function gameClear() {
         cancelAnimationFrame(animationId);
         if (bgm) bgm.pause();
-        playSound("reveal-sound");
+        playSound("timeup-sound");
         gameClearOverlay.style.display = "flex";
     }
 
     function gameOver() {
         cancelAnimationFrame(animationId);
         if (bgm) bgm.pause();
-        playSound("turn-sound");
+        playSound("timeup-sound");
         finalScoreSpan.textContent = Math.floor(player.size);
         gameOverOverlay.style.display = "flex";
     }

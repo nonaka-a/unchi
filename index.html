@@ -29,6 +29,8 @@
                     しらうんちどり</button>
                 <button id="explosion-button" class="start-button" style="background-color: #ff9800;">うんち
                     だいばくはつ</button>
+                <button id="hayaoshi-button" class="start-button" style="background-color: #03A9F4;">はやおし
+                    うんち</button>
                 <button id="deka-unchi-button" class="start-button" style="background-color: #9c27b0;">デカうんち
                     へのみち</button>
                 <button id="zukan-button" class="zukan-button">うんち ずかん</button>
@@ -113,6 +115,57 @@
                         <h3>🏆 ランキング 🏆</h3>
                         <ul id="ranking-list"></ul>
                         <button id="play-again-from-rank" class="play-again-button">もういちど</button>
+                        <button id="title-from-rank" class="start-button"
+                            style="background-color: #795548; margin-top: 10px;">タイトルへ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="hayaoshi-container" style="display: none;">
+            <button id="back-to-title-from-hayaoshi">↩</button>
+            <h1>はやおし うんち</h1>
+
+            <div class="hayaoshi-header">
+                <div class="hayaoshi-stat">
+                    レベル: <span id="hayaoshi-level">1</span>
+                </div>
+                <div class="hayaoshi-stat">
+                    スコア: <span id="hayaoshi-score">0</span>
+                </div>
+                <div class="hayaoshi-stat">
+                    のこり: <span id="hayaoshi-timer">15.00</span>
+                </div>
+                <div class="hayaoshi-stat">
+                    おてつき: <span id="hayaoshi-miss">0</span> / 3
+                </div>
+            </div>
+
+            <div id="hayaoshi-grid"></div>
+
+            <!-- レベル表示用のオーバーレイ -->
+            <div id="hayaoshi-level-overlay" style="display: none;">
+                <div id="hayaoshi-level-title">レベル 1</div>
+            </div>
+
+            <div id="hayaoshi-countdown-overlay" style="display: none;">
+                <div id="hayaoshi-countdown-text">3</div>
+            </div>
+
+            <div id="hayaoshi-result-overlay" style="display: none;">
+                <div class="result-box">
+                    <h2 id="hayaoshi-result-title">しゅうりょう！</h2>
+                    <p class="final-score-text">スコア: <span id="hayaoshi-final-score">0</span> 点</p>
+
+                    <!-- 結果画面のボタンエリア -->
+                    <div id="hayaoshi-result-buttons">
+                        <button id="hayaoshi-next-level" class="play-again-button"
+                            style="display:none; background-color: #FF9800;">つぎのレベルへ</button>
+                        <button id="hayaoshi-retry" class="play-again-button" style="display:none;">もういちど</button>
+                        <button id="hayaoshi-restart" class="play-again-button"
+                            style="background-color: #4CAF50;">さいしょから</button>
+                        <button id="hayaoshi-title-button" class="start-button"
+                            style="background-color: #795548;">タイトルへ</button>
                     </div>
                 </div>
             </div>
@@ -143,7 +196,6 @@
             <div id="deka-ranking-container"></div>
             <canvas id="deka-canvas"></canvas>
 
-            <!-- ポーズ画面（追加） -->
             <div id="deka-pause-overlay" style="display: none;">
                 <div class="result-box">
                     <h2>ちゅうだん</h2>
@@ -153,7 +205,6 @@
                 </div>
             </div>
 
-            <!-- ゲームオーバー画面 -->
             <div id="deka-game-over-overlay" style="display: none;">
                 <div class="result-box">
                     <h2>食べられちゃった！</h2>
@@ -164,7 +215,6 @@
                 </div>
             </div>
 
-            <!-- クリア画面 -->
             <div id="deka-game-clear-overlay" style="display: none;">
                 <div class="result-box">
                     <h2 style="color: #FFD700; text-shadow: 2px 2px 0 #000;">🎊クリアおめでとう！🎊</h2>
@@ -175,12 +225,13 @@
         </div>
     </div>
 
-
-
     <audio id="bgm-sound" src="audio/bgm.mp3" loop></audio>
     <audio id="turn-sound" src="audio/turn.mp3"></audio>
     <audio id="drop-sound" src="audio/drop.mp3"></audio>
     <audio id="reveal-sound" src="audio/reveal.mp3"></audio>
+    <audio id="catch-sound" src="audio/catch.mp3"></audio>
+    <audio id="timeup-sound" src="audio/timeup.mp3"></audio>
+    <audio id="incorrect-sound" src="audio/incorrect.mp3"></audio>
 
     <script src="data.js"></script>
     <script src="utils.js"></script>
@@ -188,6 +239,7 @@
     <script src="shinken.js"></script>
     <script src="explosion.js"></script>
     <script src="deka_unchi.js"></script>
+    <script src="hayaoshi.js"></script>
     <script src="main.js"></script>
 </body>
 

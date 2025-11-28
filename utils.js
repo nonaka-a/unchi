@@ -11,10 +11,36 @@ function playSound(id) {
     }
 }
 
+// 高い音（ピ！）を再生する関数
+let commonAudioCtx = null;
+function playBeepSound() {
+    if (!commonAudioCtx) {
+        commonAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (commonAudioCtx.state === 'suspended') {
+        commonAudioCtx.resume();
+    }
+
+    const osc = commonAudioCtx.createOscillator();
+    const gainNode = commonAudioCtx.createGain();
+
+    osc.connect(gainNode);
+    gainNode.connect(commonAudioCtx.destination);
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1000, commonAudioCtx.currentTime); // 1000Hz (High pitch)
+
+    gainNode.gain.setValueAtTime(0.1, commonAudioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, commonAudioCtx.currentTime + 0.1);
+
+    osc.start(commonAudioCtx.currentTime);
+    osc.stop(commonAudioCtx.currentTime + 0.1);
+}
+
 // うんちのスタイル（色やキラキラ）を適用する関数
 function setPoopStyle(container, poopData) {
     container.classList.remove("sparkle-effect");
-    
+
     if (poopData.color.startsWith("linear-gradient")) {
         const gradientId = "rainbow-gradient-" + Math.random().toString(36).substring(2, 9);
         const rainbowSVG = `<svg viewBox="0 0 100 100" width="1em" height="1em"><defs>
@@ -25,7 +51,7 @@ function setPoopStyle(container, poopData) {
         const poopBody = container.querySelector(".poop-body");
         poopBody.style.webkitTextStroke = "";
         poopBody.style.textStroke = "";
-        
+
         if (poopData.name === "とうめいな うんち") {
             poopBody.style.color = "transparent";
             poopBody.style.webkitTextStroke = "2px #a1887f";
@@ -34,7 +60,7 @@ function setPoopStyle(container, poopData) {
             poopBody.style.color = poopData.color;
         }
     }
-    
+
     if (poopData.isSparkle) {
         container.classList.add("sparkle-effect");
     }

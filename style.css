@@ -33,7 +33,8 @@ body {
 #game-container,
 #zukan-container,
 #shinken-container,
-#explosion-container {
+#explosion-container,
+#hayaoshi-container {
     background-color: var(--container-bg);
     padding: 20px;
     border-radius: 20px;
@@ -798,9 +799,9 @@ h1 {
     left: 0;
     width: 100%;
     height: 100%;
-    /* 背景色をベージュに変更 */
-    background-color: var(--bg-color);
-    z-index: 100;
+    z-index: 1000;
+    background-color: #f0f0f0;
+    display: none;
 }
 
 #deka-canvas {
@@ -994,4 +995,180 @@ h1 {
 .rank-size {
     color: #555;
     font-size: 12px;
+}
+
+/* はやおし うんち用のスタイル */
+#hayaoshi-container {
+    display: none;
+    height: 90vh;
+    position: relative;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+#back-to-title-from-hayaoshi {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: var(--brown);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.hayaoshi-header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #03A9F4;
+}
+
+.hayaoshi-stat {
+    font-size: 20px;
+    font-weight: bold;
+    color: #0277BD;
+}
+
+#hayaoshi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+    flex-grow: 1;
+    align-content: center;
+}
+
+.hayaoshi-item {
+    background-color: #fff;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.1s, background-color 0.1s;
+    position: relative;
+    aspect-ratio: 1 / 1;
+}
+
+.hayaoshi-icon {
+    font-size: 40px;
+    width: 90%;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.5;
+    transition: opacity 0.1s;
+}
+
+@media (max-width: 400px) {
+    #hayaoshi-grid {
+        max-width: 320px;
+    }
+
+    .hayaoshi-icon {
+        font-size: 30px;
+    }
+}
+
+/* 光っている状態 */
+.hayaoshi-item.active {
+    background-color: #FFF9C4;
+    border-color: #FFEB3B;
+    box-shadow: 0 0 15px #FFEB3B;
+    transform: scale(1.05);
+}
+
+.hayaoshi-item.active .hayaoshi-icon {
+    opacity: 1;
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
+}
+
+/* おてつき状態 */
+.hayaoshi-item.wrong {
+    background-color: #FFCDD2;
+    border-color: #F44336;
+    animation: shake 0.3s;
+}
+
+#hayaoshi-countdown-overlay,
+#hayaoshi-result-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#hayaoshi-countdown-text {
+    font-size: 100px;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 4px 4px 0 #000;
+    animation: pop-in 0.5s;
+}
+
+/* レベル表示用オーバーレイ */
+#hayaoshi-level-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 2000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#hayaoshi-level-title {
+    font-size: 80px;
+    font-weight: 900;
+    color: #FFD700;
+    text-shadow: 4px 4px 0 #000;
+    white-space: nowrap;
+    animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@media (max-width: 600px) {
+    #hayaoshi-level-title {
+        font-size: 15vw;
+    }
+}
+
+#hayaoshi-result-title {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+#hayaoshi-result-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+    width: 100%;
+    align-items: center;
 }
