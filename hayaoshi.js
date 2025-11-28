@@ -45,9 +45,10 @@ function initHayaoshi() {
     const TIME_LIMIT = 15; // 制限時間（秒）
 
     let gameState = {
-        score: 0,        // 現在の正解数
-        miss: 0,         // おてつき数
-        level: 1,        // 現在のレベル
+        score: 0,           // 現在の正解数（累計）
+        levelStartScore: 0, // レベル開始時点のスコア（リトライ用）
+        miss: 0,            // おてつき数（レベルごとにリセット）
+        level: 1,           // 現在のレベル
         timeLeft: TIME_LIMIT,
         lastSec: TIME_LIMIT, // カウントダウンSE用
         isPlaying: false,
@@ -61,7 +62,7 @@ function initHayaoshi() {
         hayaoshiButton.addEventListener("click", () => {
             startScreen.style.display = "none";
             hayaoshiContainer.style.display = "flex";
-            setupGame(1); // レベル1から開始
+            startNewGame(); // 最初からスタート
         });
     }
 
@@ -69,27 +70,27 @@ function initHayaoshi() {
         backButton.addEventListener("click", backToTitle);
     }
 
-    // 次のレベルへ
+    // 次のレベルへ（スコア引継ぎ、お手つきリセット）
     if (nextLevelBtn) {
         nextLevelBtn.addEventListener("click", () => {
             resultOverlay.style.display = "none";
-            setupGame(gameState.level + 1);
+            startLevel(gameState.level + 1);
         });
     }
 
-    // もういちど（失敗時のリトライ）
+    // もういちど（そのレベルの最初からリトライ）
     if (retryBtn) {
         retryBtn.addEventListener("click", () => {
             resultOverlay.style.display = "none";
-            setupGame(gameState.level);
+            retryLevel();
         });
     }
 
-    // さいしょから（レベル1へ）
+    // さいしょから（レベル1へ、スコアリセット）
     if (restartBtn) {
         restartBtn.addEventListener("click", () => {
             resultOverlay.style.display = "none";
-            setupGame(1);
+            startNewGame();
         });
     }
 
@@ -100,7 +101,7 @@ function initHayaoshi() {
         });
     }
 
-    // --- ゲームロジック ---
+    // --- ゲーム進行管理 ---
 
     function backToTitle() {
         stopGame();
@@ -108,24 +109,26 @@ function initHayaoshi() {
         startScreen.style.display = "block";
     }
 
-    function setupGame(level) {
-        // レベル範囲チェック
+    // ゲーム全体を初期化して開始
+    function startNewGame() {
+        gameState.score = 0;
+        startLevel(1);
+    }
+
+    // 特定のレベルを開始
+    function startLevel(level) {
         if (level > MAX_LEVEL) level = MAX_LEVEL;
         
-        // Reset State
+        // 状態設定
         gameState.level = level;
-        gameState.score = 0;
-        gameState.miss = 0;
+        gameState.miss = 0; // ★お手つき回数はレベルが上がるごとに0にリセット
+        gameState.levelStartScore = gameState.score; // リトライ用に現在のスコアを保存
         gameState.timeLeft = TIME_LIMIT;
-        gameState.lastSec = TIME_LIMIT; // リセット
+        gameState.lastSec = TIME_LIMIT;
         gameState.isPlaying = false;
         gameState.activePoopIndex = -1;
 
-        // UI Update
-        if (scoreDisplay) scoreDisplay.textContent = "0";
-        if (missDisplay) missDisplay.textContent = "0";
-        if (levelDisplay) levelDisplay.textContent = level;
-        if (timerDisplay) timerDisplay.textContent = TIME_LIMIT; // 整数表示
+        updateUI();
 
         // ボタン表示リセット
         if (nextLevelBtn) nextLevelBtn.style.display = "none";
@@ -136,6 +139,19 @@ function initHayaoshi() {
 
         // レベル表示 -> カウントダウン -> ゲーム開始
         showLevelStart();
+    }
+
+    // 同じレベルをリトライ（スコアをレベル開始時に戻す）
+    function retryLevel() {
+        gameState.score = gameState.levelStartScore;
+        startLevel(gameState.level);
+    }
+
+    function updateUI() {
+        if (scoreDisplay) scoreDisplay.textContent = gameState.score;
+        if (missDisplay) missDisplay.textContent = "0"; // 開始時は必ず0
+        if (levelDisplay) levelDisplay.textContent = gameState.level;
+        if (timerDisplay) timerDisplay.textContent = TIME_LIMIT;
     }
 
     function renderGrid() {
