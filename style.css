@@ -34,7 +34,8 @@ body {
 #zukan-container,
 #shinken-container,
 #explosion-container,
-#hayaoshi-container {
+#hayaoshi-container,
+#bazooka-container {
     background-color: var(--container-bg);
     padding: 20px;
     border-radius: 20px;
@@ -43,17 +44,42 @@ body {
     box-sizing: border-box;
 }
 
+/* サブタイトル (新規追加) */
+#sub-title {
+    font-size: 28px;
+    font-weight: 900;
+    color: #95610c;
+    margin: 0 0 -20px 0; /* -10px -> -20px に変更してさらに詰める */
+    text-shadow: 2px 2px 0 #fff;
+    animation: pop-in 0.5s ease-out; /* 1s -> 0.5s に変更して速く */
+}
+
+.park-title {
+    font-size: 56px;
+    font-weight: 900;
+    color: #ff9800;
+    text-shadow: 4px 4px 0 #fff, 7px 7px 0 #795548;
+    letter-spacing: 2px;
+    background: none;
+    -webkit-text-fill-color: initial;
+    filter: drop-shadow(3px 3px 0px #fff) drop-shadow(5px 5px 0px rgba(0, 0, 0, 0.2));
+    animation: pop-title 2s infinite ease-in-out;
+    margin-top: 5px; /* 10px -> 5px に変更 */
+    margin-bottom: 20px;
+    -webkit-text-stroke: 2px #fff;
+}
+
 .start-poop-container {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
-    margin-bottom: 20px;
-    height: 100px;
+    margin-bottom: 10px;
+    height: 120px; /* 高さ調整 */
 }
 
 .mini-poop {
-    font-size: 60px;
+    font-size: 80px; /* 60px -> 80px */
     animation: bounce 2s infinite ease-in-out;
 }
 
@@ -66,15 +92,8 @@ body {
 }
 
 @keyframes bounce {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-10px);
-    }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
 }
 
 .start-button,
@@ -96,29 +115,14 @@ body {
     box-sizing: border-box
 }
 
-.start-button {
-    background-color: var(--brown)
-}
+.start-button { background-color: var(--brown) }
+.start-button:hover { background-color: var(--dark-brown) }
 
-.start-button:hover {
-    background-color: var(--dark-brown)
-}
+.zukan-button { background-color: #4caf50 }
+.zukan-button:hover { background-color: #388e3c }
 
-.zukan-button {
-    background-color: #4caf50
-}
-
-.zukan-button:hover {
-    background-color: #388e3c
-}
-
-.play-again-button {
-    background-color: var(--brown)
-}
-
-.play-again-button:hover {
-    background-color: var(--dark-brown)
-}
+.play-again-button { background-color: var(--brown) }
+.play-again-button:hover { background-color: var(--dark-brown) }
 
 .start-button:active,
 .play-again-button:active,
@@ -126,34 +130,18 @@ body {
     transform: translateY(2px)
 }
 
-/* トップ画面の各ゲームボタンの色設定 (HTMLのinline styleを廃止) */
-#shinken-button {
-    background-color: #d32f2f;
-}
-#shinken-button:hover {
-    background-color: #b71c1c;
-}
+/* トップ画面の各ゲームボタンの色設定 */
+#shinken-button { background-color: #d32f2f; }
+#shinken-button:hover { background-color: #b71c1c; }
 
-#explosion-button {
-    background-color: #ff9800;
-}
-#explosion-button:hover {
-    background-color: #f57c00;
-}
+#explosion-button { background-color: #ff9800; }
+#explosion-button:hover { background-color: #f57c00; }
 
-#hayaoshi-button {
-    background-color: #03A9F4;
-}
-#hayaoshi-button:hover {
-    background-color: #0288d1;
-}
+#hayaoshi-button { background-color: #03A9F4; }
+#hayaoshi-button:hover { background-color: #0288d1; }
 
-#deka-unchi-button {
-    background-color: #9c27b0;
-}
-#deka-unchi-button:hover {
-    background-color: #7b1fa2;
-}
+#deka-unchi-button { background-color: #9c27b0; }
+#deka-unchi-button:hover { background-color: #7b1fa2; }
 
 #game-container,
 #zukan-container,
@@ -173,29 +161,20 @@ h1 {
     font-size: 56px;
     font-weight: 900;
     color: #ff9800;
-    text-shadow:
-        4px 4px 0 #fff,
-        7px 7px 0 #795548;
+    text-shadow: 4px 4px 0 #fff, 7px 7px 0 #795548;
     letter-spacing: 2px;
     background: none;
     -webkit-text-fill-color: initial;
-
     filter: drop-shadow(3px 3px 0px #fff) drop-shadow(5px 5px 0px rgba(0, 0, 0, 0.2));
     animation: pop-title 2s infinite ease-in-out;
-    margin-bottom: 30px;
+    margin-top: 10px; /* 追加 */
+    margin-bottom: 20px; /* 修正 */
     -webkit-text-stroke: 2px #fff;
 }
 
 @keyframes pop-title {
-
-    0%,
-    100% {
-        transform: scale(1) rotate(0deg);
-    }
-
-    50% {
-        transform: scale(1.1) rotate(-2deg);
-    }
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.1) rotate(-2deg); }
 }
 
 .gacha-machine-container {
@@ -211,9 +190,7 @@ h1 {
     transition: transform .2s
 }
 
-#gacha-machine-svg.shake {
-    animation: shake .5s
-}
+#gacha-machine-svg.shake { animation: shake .5s }
 
 #gacha-handle {
     cursor: pointer;
@@ -225,9 +202,7 @@ h1 {
     transform: scale(1.1)
 }
 
-#gacha-handle.rotate {
-    animation: rotate-handle .5s ease-in-out
-}
+#gacha-handle.rotate { animation: rotate-handle .5s ease-in-out }
 
 #capsule {
     width: 50px;
@@ -262,9 +237,7 @@ h1 {
 }
 
 .poop-display,
-.zukan-poop-icon {
-    position: relative;
-}
+.zukan-poop-icon { position: relative; }
 
 .poop-display {
     font-size: 100px;
@@ -272,9 +245,7 @@ h1 {
     animation: pop-in .5s cubic-bezier(.68, -.55, .27, 1.55)
 }
 
-#poop-name {
-    font-size: 22px
-}
+#poop-name { font-size: 22px }
 
 #fortune-text {
     font-size: 28px;
@@ -287,25 +258,11 @@ h1 {
     min-height: 40px
 }
 
-.fortune-daikichi {
-    color: #ff4500
-}
-
-.fortune-kichi {
-    color: #228b22
-}
-
-.fortune-chukichi {
-    color: #4682b4
-}
-
-.fortune-shokichi {
-    color: #6a5acd
-}
-
-.fortune-kyo {
-    color: #808080
-}
+.fortune-daikichi { color: #ff4500 }
+.fortune-kichi { color: #228b22 }
+.fortune-chukichi { color: #4682b4 }
+.fortune-shokichi { color: #6a5acd }
+.fortune-kyo { color: #808080 }
 
 #back-to-title-button {
     position: absolute;
@@ -321,12 +278,7 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10
-}
-
-
-
-#back-to-title-button {
+    z-index: 10;
     left: 15px
 }
 
@@ -378,9 +330,7 @@ h1 {
 }
 
 @media (min-width:600px) {
-    #zukan-grid {
-        grid-template-columns: repeat(2, 1fr)
-    }
+    #zukan-grid { grid-template-columns: repeat(2, 1fr) }
 }
 
 .sparkle-effect::before,
@@ -409,19 +359,9 @@ h1 {
 }
 
 @keyframes sparkle-anim {
-    0% {
-        transform: translateY(0px) scale(0);
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-    100% {
-        transform: translateY(-40px) scale(1.5);
-        opacity: 0;
-    }
+    0% { transform: translateY(0px) scale(0); opacity: 1; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-40px) scale(1.5); opacity: 0; }
 }
 
 .zukan-poop-icon.sparkle-effect::before,
@@ -430,98 +370,48 @@ h1 {
 }
 
 @keyframes sparkle-anim-small {
-    0% {
-        transform: translateY(0px) scale(0);
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-    100% {
-        transform: translateY(-20px) scale(1.5);
-        opacity: 0;
-    }
+    0% { transform: translateY(0px) scale(0); opacity: 1; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-20px) scale(1.5); opacity: 0; }
 }
 
 @keyframes shake {
-
-    0%,
-    to {
-        transform: translateX(0)
-    }
-
-    25% {
-        transform: translateX(-5px) rotate(-2deg)
-    }
-
-    75% {
-        transform: translateX(5px) rotate(2deg)
-    }
+    0%, to { transform: translateX(0) }
+    25% { transform: translateX(-5px) rotate(-2deg) }
+    75% { transform: translateX(5px) rotate(2deg) }
 }
 
-@keyframes rotate-handle {
-    to {
-        transform: rotate(360deg)
-    }
-}
+@keyframes rotate-handle { to { transform: rotate(360deg) } }
 
 @keyframes drop-capsule {
-    0% {
-        transform: translateY(-250px);
-        opacity: 1
-    }
-
-    to {
-        transform: translateY(0);
-        opacity: 1
-    }
+    0% { transform: translateY(-250px); opacity: 1 }
+    to { transform: translateY(0); opacity: 1 }
 }
 
 @keyframes pulse {
-
-    0%,
-    to {
-        transform: scale(1);
-        box-shadow: 0 2px 5px rgba(0, 0, 0, .2)
-    }
-
-    50% {
-        transform: scale(1.05);
-        box-shadow: 0 4px 15px rgba(251, 192, 45, .7)
-    }
+    0%, to { transform: scale(1); box-shadow: 0 2px 5px rgba(0, 0, 0, .2) }
+    50% { transform: scale(1.05); box-shadow: 0 4px 15px rgba(251, 192, 45, .7) }
 }
 
 @keyframes fade-in {
-    0% {
-        opacity: 0
-    }
-
-    to {
-        opacity: 1
-    }
+    0% { opacity: 0 }
+    to { opacity: 1 }
 }
 
 @keyframes pop-in {
-    0% {
-        transform: scale(0)
-    }
-
-    to {
-        transform: scale(1)
-    }
+    0% { transform: scale(0) }
+    to { transform: scale(1) }
 }
 
-/* しんけんしらうんちどり用のスタイル */
+/* しんけんしらうんちどり */
 #shinken-field {
     position: relative;
     height: 250px;
-    background: #e0f7fa;
+    background: #424242;
     border-radius: 10px;
     overflow: hidden;
     margin-bottom: 20px;
-    border: 4px solid #b2ebf2;
+    border: 4px solid #616161;
 }
 
 #shinken-message {
@@ -596,9 +486,7 @@ h1 {
     transition: background-color 0.2s, color 0.2s;
 }
 
-.diff-btn:hover {
-    background-color: #ccc;
-}
+.diff-btn:hover { background-color: #ccc; }
 
 .diff-btn.selected {
     background-color: #ff9800;
@@ -625,7 +513,7 @@ h1 {
     z-index: 10;
 }
 
-/* うんち だいばくはつ用のスタイル */
+/* うんち だいばくはつ */
 #explosion-container {
     display: none;
     height: 90vh;
@@ -668,9 +556,7 @@ h1 {
     color: #d84315;
 }
 
-#explosion-timer-value {
-    font-size: 24px;
-}
+#explosion-timer-value { font-size: 24px; }
 
 #explosion-field {
     position: relative;
@@ -681,6 +567,7 @@ h1 {
     border: 4px solid #ffcc80;
     overflow: hidden;
     margin: 0 auto 10px;
+    
 }
 
 #volcano-svg {
@@ -695,9 +582,7 @@ h1 {
     transition: transform 0.05s;
 }
 
-#volcano-svg.bump {
-    transform: translateX(-50%) scale(1.05);
-}
+#volcano-svg.bump { transform: translateX(-50%) scale(1.05); }
 
 .flying-poop {
     position: absolute;
@@ -786,7 +671,7 @@ h1 {
     color: #5d4037;
 }
 
-/* デカうんちへのみち用のスタイル */
+/* デカうんちへのみち */
 #deka-unchi-selection {
     display: none;
     max-height: 90vh;
@@ -829,7 +714,7 @@ h1 {
     width: 100%;
     height: 100%;
     z-index: 1000;
-    background-color: var(--container-bg); /* ベージュに変更 */
+    background-color: var(--container-bg);
     display: none;
 }
 
@@ -861,48 +746,32 @@ h1 {
 .menu-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    /* 1行に2つ（同じ幅） */
     gap: 15px;
-    /* ボタン同士の間隔 */
     width: 100%;
     margin: 0 auto;
 }
 
-/* グリッド内のボタン調整 */
 .menu-grid .start-button,
 .menu-grid .zukan-button {
     width: 100%;
-    /* 横幅を親要素（セル）に合わせる */
     min-width: 0;
-    /* グリッド内での幅崩れ防止 */
     margin: 0;
-    /* 個別のマージンを削除 */
     height: 100%;
-    /* 高さを揃える */
     min-height: 60px;
-    /* 最低限の高さを確保 */
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 10px;
-    /* 内側の余白調整 */
     box-sizing: border-box;
 }
 
-/* ボタンが奇数個の場合、最後の1つを横幅いっぱいに広げる */
 .menu-grid>button:last-child:nth-child(odd) {
     grid-column: span 2;
 }
 
-/* スマホなど画面が狭いときは1列に戻す */
 @media (max-width: 480px) {
-    .menu-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .menu-grid>button:last-child:nth-child(odd) {
-        grid-column: auto;
-    }
+    .menu-grid { grid-template-columns: 1fr; }
+    .menu-grid>button:last-child:nth-child(odd) { grid-column: auto; }
 }
 
 #deka-game-over-overlay,
@@ -932,7 +801,6 @@ h1 {
     margin-bottom: 10px;
 }
 
-/* クリア画面用 */
 #deka-game-clear-overlay {
     position: absolute;
     top: 0;
@@ -940,7 +808,6 @@ h1 {
     width: 100%;
     height: 100%;
     background-color: rgba(255, 255, 255, 0.5);
-    /* 明るめの背景 */
     z-index: 200;
     display: flex;
     justify-content: center;
@@ -954,7 +821,6 @@ h1 {
     background-color: #fffde7;
 }
 
-/* デカうんち ランキング表示 */
 #deka-ranking-container {
     position: absolute;
     top: 10px;
@@ -964,11 +830,9 @@ h1 {
     border-radius: 10px;
     padding: 10px;
     z-index: 105;
-    /* ボタンより下、キャンバスより上 */
     font-family: 'M PLUS Rounded 1c', sans-serif;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     pointer-events: none;
-    /* ゲーム操作の邪魔にならないように */
 }
 
 .deka-rank-title {
@@ -996,10 +860,8 @@ h1 {
     border-radius: 5px;
 }
 
-/* プレイヤー用の座布団スタイル */
 .deka-rank-item.player-rank {
     background-color: #fff176;
-    /* 金色の座布団 */
     border: 2px solid #ff9800;
     font-weight: bold;
     transform: scale(1.05);
@@ -1026,7 +888,7 @@ h1 {
     font-size: 12px;
 }
 
-/* はやおし うんち用のスタイル */
+/* はやおし うんち */
 #hayaoshi-container {
     display: none;
     height: 90vh;
@@ -1095,7 +957,7 @@ h1 {
 }
 
 .hayaoshi-icon {
-    font-size: 40px;
+    font-size: 60px; /* 修正 */
     width: 90%;
     height: 90%;
     display: flex;
@@ -1106,16 +968,10 @@ h1 {
 }
 
 @media (max-width: 400px) {
-    #hayaoshi-grid {
-        max-width: 320px;
-    }
-
-    .hayaoshi-icon {
-        font-size: 30px;
-    }
+    #hayaoshi-grid { max-width: 320px; }
+    .hayaoshi-icon { font-size: 45px; }
 }
 
-/* 光っている状態 */
 .hayaoshi-item.active {
     background-color: #FFF9C4;
     border-color: #FFEB3B;
@@ -1128,7 +984,6 @@ h1 {
     filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
 }
 
-/* おてつき状態 */
 .hayaoshi-item.wrong {
     background-color: #FFCDD2;
     border-color: #F44336;
@@ -1158,7 +1013,6 @@ h1 {
     animation: pop-in 0.5s;
 }
 
-/* レベル表示用オーバーレイ */
 #hayaoshi-level-overlay {
     position: absolute;
     top: 0;
@@ -1183,9 +1037,7 @@ h1 {
 }
 
 @media (max-width: 600px) {
-    #hayaoshi-level-title {
-        font-size: 15vw;
-    }
+    #hayaoshi-level-title { font-size: 15vw; }
 }
 
 #hayaoshi-result-title {
@@ -1200,4 +1052,181 @@ h1 {
     margin-top: 15px;
     width: 100%;
     align-items: center;
+}
+
+/* バズーカ */
+#bazooka-button {
+    background-color: #558B2F;
+}
+
+#bazooka-button:hover { background-color: #33691E; }
+
+#bazooka-container {
+    display: none;
+    background-color: var(--container-bg);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .1);
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+}
+
+#bazooka-canvas {
+    display: block;
+    width: 100%;
+    height: 400px;
+    background-color: #fff8e1;
+    border: 4px solid #8d6e63;
+    border-radius: 10px;
+    cursor: crosshair;
+}
+
+#back-to-title-from-bazooka {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: var(--brown);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 110;
+}
+
+#bazooka-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 120;
+    border-radius: 20px;
+    animation: fade-in 0.3s;
+}
+
+#bazooka-message {
+    font-size: 60px;
+    color: #FFD700;
+    text-shadow: 4px 4px 0 #000;
+    margin-bottom: 20px;
+    animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* あそびかたボタン */
+#how-to-play-btn {
+    background-color: #FFC107;
+    color: #3E2723;
+}
+
+#how-to-play-btn:hover { background-color: #FFA000; }
+
+/* モーダル */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 3000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s;
+}
+
+.modal-content {
+    background-color: #fff;
+    border: 4px solid #795548;
+    border-radius: 20px;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: pop-in 0.3s;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #aaa;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+    line-height: 1;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+    color: #d32f2f;
+    text-decoration: none;
+}
+
+.modal-content h2 {
+    color: #795548;
+    margin-top: 0;
+    border-bottom: 2px dashed #795548;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.game-instruction {
+    background-color: #FFF8E1;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    text-align: left;
+    border: 2px solid #FFECB3;
+}
+
+.game-instruction h3 {
+    margin-top: 0;
+    color: #5D4037;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.game-instruction p {
+    margin-bottom: 0;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.modal-content::-webkit-scrollbar { width: 10px; }
+.modal-content::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 5px; }
+.modal-content::-webkit-scrollbar-thumb { background: #8D6E63; border-radius: 5px; }
+.modal-content::-webkit-scrollbar-thumb:hover { background: #795548; }
+
+.instruction-icon {
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    margin-right: 0.2em;
+}
+
+.instruction-icon svg {
+    width: 100%;
+    height: 100%;
 }

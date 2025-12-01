@@ -31,11 +31,12 @@ function initShinken() {
         shinkenActionBtn.style.display = 'none';
         
         shinkenMessage.textContent = 'スタートをおしてね';
-        shinkenMessage.style.color = '#00bcd4';
-        whitePoop.style.transition = 'none';
-        whitePoop.style.top = '-100px';
+        shinkenMessage.style.color = '#fff';
         
-        // 変更: 最初の手の位置を離すため、絵文字を変更してスペースを挿入
+        // 待機中も上の方に見えるように配置
+        whitePoop.style.transition = 'none';
+        whitePoop.style.top = '10px'; 
+        
         catcherHands.textContent = '✋　　✋';
     }
 
@@ -55,7 +56,7 @@ function initShinken() {
         whitePoop.style.top = '140px'; // 位置固定
 
         shinkenMessage.textContent = 'キャッチせいこう!!';
-        shinkenMessage.style.color = '#ff5722';
+        shinkenMessage.style.color = '#FFD700'; // 金色で見やすく
         playSound("reveal-sound");
 
         setTimeout(resetShinkenUI, 2000);
@@ -76,7 +77,7 @@ function initShinken() {
             catcherHands.textContent = '🤕';
             playSound("drop-sound");
         }
-        shinkenMessage.style.color = '#555';
+        shinkenMessage.style.color = '#ddd'; // 明るいグレー
 
         setTimeout(resetShinkenUI, 2000);
     }
@@ -147,9 +148,14 @@ function initShinken() {
         if (shinkenState !== 'idle') return;
         shinkenState = 'waiting';
         shinkenMessage.textContent = 'しゅうちゅう...';
+        shinkenMessage.style.color = '#fff';
         shinkenStartBtn.style.display = 'none';
         
         shinkenActionBtn.style.display = 'inline-flex';
+
+        // 一度画面外へ隠す
+        whitePoop.style.transition = 'top 0.2s ease-out';
+        whitePoop.style.top = '-100px';
 
         // 2〜5秒後に落下
         const waitTime = Math.random() * 3000 + 2000;

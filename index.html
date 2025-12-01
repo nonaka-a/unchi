@@ -20,6 +20,7 @@
 
     <div class="main-wrapper">
         <div id="start-screen">
+            <p id="sub-title">みんな だいすき！</p>
             <h1 class="park-title">💩うんちパーク💩</h1>
             <div id="start-poop-container" class="start-poop-container"></div>
 
@@ -29,7 +30,10 @@
                 <button id="explosion-button" class="start-button">うんち だいばくはつ</button>
                 <button id="hayaoshi-button" class="start-button">はやおし うんち</button>
                 <button id="deka-unchi-button" class="start-button">デカうんち へのみち</button>
+                <button id="bazooka-button" class="start-button">うんち たいほう</button>
+
                 <button id="zukan-button" class="zukan-button">うんち ずかん</button>
+                <button id="how-to-play-btn" class="start-button">あそびかた</button>
             </div>
         </div>
 
@@ -219,6 +223,54 @@
                 </div>
             </div>
         </div>
+
+        <div id="bazooka-container" style="display: none;">
+            <button id="back-to-title-from-bazooka">↩</button>
+            <canvas id="bazooka-canvas"></canvas>
+            <div id="bazooka-overlay" style="display: none;">
+                <h2 id="bazooka-message">クリア！</h2>
+                <button id="bazooka-retry-btn" class="play-again-button">もういちど</button>
+                <button id="bazooka-title-btn" class="start-button" style="background-color: #795548;">タイトルへ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- あそびかたモーダル -->
+    <div id="how-to-play-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>🎮 あそびかた 🎮</h2>
+
+            <div class="game-instruction">
+                <h3><span class="instruction-icon" data-poop-idx="2"></span> うんち うらない ガチャ</h3>
+                <p>ガチャガチャを まわして、今日の うんちを うらなおう！<br>レバーを クリックすると カプセルが でてくるよ。<br>金や 銀、にじいろの レアな うんちが でるかも！？</p>
+            </div>
+
+            <div class="game-instruction">
+                <h3><span class="instruction-icon" data-poop-idx="10"></span> しんけん しらうんちどり</h3>
+                <p>「しろうんち」が みえた しゅんかんに、すばやく <strong>U</strong> ボタンを おして キャッチしよう！<br>はんのうそくどが しょうぶの カギだ！<br>きみは
+                    みごとにキャッチできるかな？</p>
+            </div>
+
+            <div class="game-instruction">
+                <h3><span class="instruction-icon" data-poop-idx="8"></span> うんち だいばくはつ</h3>
+                <p>30びょうかん、キーボードの キーを どれでも いいから ひたすら レン打！<br>おせば おすほど かざんから たくさんの うんちが とびだすよ！<br>ランキング 1いを めざして、げんかいに ちょうせんだ！</p>
+            </div>
+
+            <div class="game-instruction">
+                <h3><span class="instruction-icon" data-poop-idx="6"></span> はやおし うんち</h3>
+                <p>ひかった うんちを すばやく クリック！<br>レベルが あがると、ひかる スピードが はやくなるよ。<br>まちがった うんちをおしたら おてつきだ！<br>しゅうちゅうりょくを たかめて、ハイスコアを めざそう！</p>
+            </div>
+
+            <div class="game-instruction">
+                <h3><span class="instruction-icon" data-poop-idx="11"></span> デカうんち へのみち</h3>
+                <p>うんちを 操作して、フィールドにある ごはんを たべよう！<br>たべるたびに うんちが どんどん 大きく なっていくよ。ほかの ちいさな うんちも たべれるよ。<br>でも きをつけて！ じぶんより　おおきいうんちに ぶつかると ゲームオーバー。<br>めざせデカうんちマスター！</p>
+            </div>
+            <div class="game-instruction">
+                <h3><span class="instruction-icon" data-poop-idx="5"></span> うんち たいほう</h3>
+                <p>ドラッグで 角度と つよを きめて、たいほうから うんちを はっしゃ！<br> トイレに うまく 入れば クリア！<br>キミは じょうずに ながせるかな？</p>
+            </div>
+        </div>
     </div>
 
     <audio id="bgm-sound" src="audio/bgm.mp3" loop></audio>
@@ -236,6 +288,7 @@
     <script src="explosion.js"></script>
     <script src="deka_unchi.js"></script>
     <script src="hayaoshi.js"></script>
+    <script src="bazooka.js"></script>
     <script src="main.js"></script>
 </body>
 

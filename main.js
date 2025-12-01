@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initExplosion();
     initDekaUnchi();
     initHayaoshi(); // 追加
+    initBazooka(); // 追加
 
     // トップ画面のうんち表示
     const startPoopContainer = document.getElementById("start-poop-container");
@@ -88,4 +89,37 @@ document.addEventListener("DOMContentLoaded", () => {
             document.exitFullscreen();
         }
     });
+
+    // あそびかたモーダルの制御
+    const howToPlayBtn = document.getElementById("how-to-play-btn");
+    const howToPlayModal = document.getElementById("how-to-play-modal");
+    const closeModalSpan = document.querySelector(".close-modal");
+
+    if (howToPlayBtn && howToPlayModal && closeModalSpan) {
+        howToPlayBtn.addEventListener("click", () => {
+            howToPlayModal.style.display = "flex";
+
+            // あそびかたアイコンの描画
+            const instructionIcons = document.querySelectorAll(".instruction-icon");
+            instructionIcons.forEach(icon => {
+                const idx = parseInt(icon.getAttribute("data-poop-idx"), 10);
+                if (!isNaN(idx) && poops[idx]) {
+                    // すでに描画済みかチェック（簡易的）
+                    if (!icon.hasChildNodes()) {
+                        setPoopStyle(icon, poops[idx]);
+                    }
+                }
+            });
+        });
+
+        closeModalSpan.addEventListener("click", () => {
+            howToPlayModal.style.display = "none";
+        });
+
+        window.addEventListener("click", (event) => {
+            if (event.target === howToPlayModal) {
+                howToPlayModal.style.display = "none";
+            }
+        });
+    }
 });

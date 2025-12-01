@@ -65,6 +65,10 @@ function initDekaUnchi() {
     let currentDifficulty = 'hard'; // 'easy' or 'hard'
     let selectedPoopData = null; // Store selected poop for difficulty screen
 
+    // 追加: ゲーム終了状態フラグ
+    let isGameClear = false;
+    let isGameOver = false;
+
     // SE
     function playEatSound() {
         if (!audioCtx) {
@@ -158,6 +162,10 @@ function initDekaUnchi() {
         gameOverOverlay.style.display = "none";
         gameClearOverlay.style.display = "none";
         pauseOverlay.style.display = "none";
+
+        // フラグ初期化
+        isGameClear = false;
+        isGameOver = false;
 
         if (bgm) {
             bgm.currentTime = 0;
@@ -337,6 +345,9 @@ function initDekaUnchi() {
     }
 
     function update() {
+        // 終了状態なら更新しない
+        if (isGameClear || isGameOver) return;
+
         const now = Date.now();
         frameCount++;
 
@@ -384,7 +395,9 @@ function initDekaUnchi() {
 
         // クリア判定
         if (player.size >= 500) {
-            gameClear();
+            if (!isGameClear) {
+                gameClear();
+            }
             return;
         }
 
@@ -649,7 +662,9 @@ function initDekaUnchi() {
                     spawnNPC(otherPoops, true);
 
                 } else {
-                    gameOver();
+                    if (!isGameOver) {
+                        gameOver();
+                    }
                     return;
                 }
             }
@@ -657,6 +672,9 @@ function initDekaUnchi() {
     }
 
     function gameClear() {
+        if (isGameClear) return;
+        isGameClear = true;
+
         cancelAnimationFrame(animationId);
         if (bgm) bgm.pause();
         playSound("timeup-sound");
@@ -664,6 +682,9 @@ function initDekaUnchi() {
     }
 
     function gameOver() {
+        if (isGameOver) return;
+        isGameOver = true;
+
         cancelAnimationFrame(animationId);
         if (bgm) bgm.pause();
         playSound("timeup-sound");
