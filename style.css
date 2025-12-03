@@ -1476,3 +1476,7 @@ h1 {
     0% { transform: translateY(0) rotate(0deg); opacity: 1; }
     100% { transform: translateY(80vh) rotate(720deg); opacity: 0; }
 }
+
+#deka-unchi-game, #shinken-field, #bazooka-canvas {
+    touch-action: none; /* ブラウザのデフォルトタッチ操作を無効化 */
+}
