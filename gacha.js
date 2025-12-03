@@ -36,12 +36,30 @@ function initGacha() {
     // --- 関数定義 ---
 
     function choosePoop() {
-        const totalWeight = poops.reduce((sum, poop) => sum + poop.weight, 0);
+        const visited = JSON.parse(localStorage.getItem("zukan_visited") || "[]");
+        
+        // 重み付け計算用のリスト作成
+        // 未所持の場合は重みを3倍にする（調整可能）
+        const adjustedPoops = poops.map(poop => {
+            const isUnvisited = !visited.includes(poop.name);
+            return {
+                ...poop,
+                weight: isUnvisited ? poop.weight * 3 : poop.weight
+            };
+        });
+
+        const totalWeight = adjustedPoops.reduce((sum, poop) => sum + poop.weight, 0);
         let random = Math.random() * totalWeight;
-        for (const poop of poops) {
-            if (random < poop.weight) return poop;
+        
+        for (const poop of adjustedPoops) {
+            if (random < poop.weight) {
+                // 元のデータ(poops配列内のオブジェクト)を返す必要があるため、名前で検索して返す
+                return poops.find(p => p.name === poop.name);
+            }
             random -= poop.weight;
         }
+        // フォールバック（万が一の誤差対策）
+        return poops[0];
     }
 
     function displayResult(poop) {

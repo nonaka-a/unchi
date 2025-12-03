@@ -693,7 +693,11 @@ function initDekaUnchi() {
 
         // アチーブメント
         unlockAchievement("deka_master");
-        if (currentDifficulty === 'easy') unlockAchievement("deka_clear_easy");
+        if (currentDifficulty === 'easy') {
+            unlockAchievement("deka_clear_easy");
+        } else if (currentDifficulty === 'hard') {
+            unlockAchievement("deka_clear_hard"); // 追加
+        }
     }
 
     function gameOver() {
