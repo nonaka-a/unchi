@@ -122,6 +122,12 @@ function initExplosion() {
         clearInterval(timerInterval);
         playSound("timeup-sound");
 
+        // アチーブメント判定
+        unlockAchievement("exp_play");
+        if (totalCount >= 200) unlockAchievement("exp_200");
+        if (totalCount >= 500) unlockAchievement("exp_500");
+        if (totalCount >= 1000) unlockAchievement("exp_1000");
+
         // 結果表示
         finalScoreDisplay.textContent = totalCount;
         resultOverlay.style.display = "flex";

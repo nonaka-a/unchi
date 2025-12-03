@@ -34,7 +34,7 @@ function initBazooka() {
     let gameState = "idle";
     let width, height;
     let currentLevel = 1;
-    const MAX_LEVEL = 4;
+    const MAX_LEVEL = 7;
 
     // 設定
     let bazookaPos = { x: 0, y: 0, dir: 1 };
@@ -213,6 +213,54 @@ function initBazooka() {
             });
 
             toilet.x = width - 250;
+        } else if (level === 5) {
+            // Level 5: 空中で静止している正方形ブロックが障害物として2つ
+            const blockSize = 60;
+            obstacles.push({
+                type: 'rect',
+                x: width * 0.4, y: groundY - 250,
+                w: blockSize, h: blockSize,
+                color: blockColor
+            });
+            obstacles.push({
+                type: 'rect',
+                x: width * 0.6, y: groundY - 150,
+                w: blockSize, h: blockSize,
+                color: blockColor
+            });
+            toilet.x = width - 100;
+        } else if (level === 6) {
+            // Level 6: Level 5の障害物がゆっくりと上下に動いている
+            const blockSize = 60;
+            obstacles.push({
+                type: 'rect',
+                x: width * 0.4, y: groundY - 250,
+                w: blockSize, h: blockSize,
+                color: blockColor,
+                vy: 1, minY: groundY - 350, maxY: groundY - 150
+            });
+            obstacles.push({
+                type: 'rect',
+                x: width * 0.6, y: groundY - 150,
+                w: blockSize, h: blockSize,
+                color: blockColor,
+                vy: -1, minY: groundY - 250, maxY: groundY - 50
+            });
+            toilet.x = width - 100;
+        } else if (level === 7) {
+            // Level 7: Level 3にあった壁が左右にゆっくり動いている
+            const wallH = 250;
+            const wallW = 40;
+            const wallX = width / 2 - wallW / 2;
+
+            obstacles.push({
+                type: 'rect',
+                x: wallX, y: groundY - wallH,
+                w: wallW, h: wallH,
+                color: blockColor,
+                vx: 1.5, minX: width * 0.3, maxX: width * 0.7
+            });
+            toilet.x = width - 150;
         }
 
         if (bazookaPos.dir === 1) {
@@ -386,6 +434,30 @@ function initBazooka() {
     }
 
     function update() {
+        // 障害物の移動
+        obstacles.forEach(obs => {
+            if (obs.vx) {
+                obs.x += obs.vx;
+                if (obs.x < obs.minX) {
+                    obs.x = obs.minX;
+                    obs.vx *= -1;
+                } else if (obs.x > obs.maxX) {
+                    obs.x = obs.maxX;
+                    obs.vx *= -1;
+                }
+            }
+            if (obs.vy) {
+                obs.y += obs.vy;
+                if (obs.y < obs.minY) {
+                    obs.y = obs.minY;
+                    obs.vy *= -1;
+                } else if (obs.y > obs.maxY) {
+                    obs.y = obs.maxY;
+                    obs.vy *= -1;
+                }
+            }
+        });
+
         if (gameState === "flying" && activeBullet) {
             const b = activeBullet;
             const gravity = 0.5;
@@ -514,8 +586,14 @@ function initBazooka() {
 
         if (isClear) {
             playFlushSound();
+
+            // アチーブメント
+            if (currentLevel === 1) unlockAchievement("bazooka_lv1");
+            if (currentLevel === 3) unlockAchievement("bazooka_lv3");
+            if (currentLevel === 5) unlockAchievement("bazooka_lv5");
+            if (currentLevel === 7) unlockAchievement("bazooka_lv7");
             
-            if (currentLevel < MAX_LEVEL) {
+            if (currentLevel < MAX_LEVEL && ammoQueue.length > 0) {
                 newMessageEl.innerHTML = `レベル${currentLevel}<br>クリア！`;
                 newMessageEl.style.color = "#FFD700";
                 
@@ -525,12 +603,23 @@ function initBazooka() {
                     nextLevel();
                 };
             } else {
-                newMessageEl.textContent = "ぜんくりあ！";
+                if (ammoQueue.length === 0 && currentLevel < MAX_LEVEL) {
+                    newMessageEl.innerHTML = `レベル${currentLevel} クリア！<br>でも タマぎれ...`;
+                } else {
+                    newMessageEl.textContent = "ぜんくりあ！";
+                }
+                
                 newMessageEl.style.color = "#FFD700"; 
-                newRetryBtn.style.display = "none"; 
+                newRetryBtn.textContent = "さいしょから";
+                newRetryBtn.style.backgroundColor = "#4CAF50";
+                newRetryBtn.onclick = startGame;
             }
         } else {
-            newMessageEl.textContent = "しっぱい...";
+            if (ammoQueue.length === 0) {
+                newMessageEl.textContent = "おしまい";
+            } else {
+                newMessageEl.textContent = "しっぱい...";
+            }
             newMessageEl.style.color = "#555";
             playSound("incorrect-sound");
             newRetryBtn.textContent = "もういちど";
@@ -624,7 +713,7 @@ function initBazooka() {
             ctx.restore();
         }
 
-        if (gameState === "aiming") {
+        if (gameState === "aiming" && aimPower > 0) {
             drawGuide(ctx, bazookaPos.x, bazookaPos.y, aimAngle, aimPower);
         }
     }
@@ -814,6 +903,17 @@ function initBazooka() {
         e.preventDefault();
         const pos = getPos(e);
         
+        // 修正: キャンセル判定(大砲中心から50px以内ならパワー0)
+        const distToBazooka = Math.sqrt((pos.x - bazookaPos.x)**2 + (pos.y - bazookaPos.y)**2);
+        if (distToBazooka < 50) {
+            aimPower = 0;
+            // 角度は更新してドラッグ操作の追従感を残す
+            const dx = pos.x - bazookaPos.x;
+            const dy = pos.y - bazookaPos.y;
+            aimAngle = Math.atan2(dy, dx);
+            return;
+        }
+
         const dx = pos.x - bazookaPos.x;
         const dy = pos.y - bazookaPos.y;
         aimAngle = Math.atan2(dy, dx);
@@ -829,6 +929,7 @@ function initBazooka() {
         if (!isDragging) return;
         isDragging = false;
         
+        // 修正: パワー0なら発射せずアイドル状態へ
         if (aimPower > 3) {
             fire();
         } else {

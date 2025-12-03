@@ -47,7 +47,8 @@ function initDekaUnchi() {
         poopData: null,
         img: null,
         angle: 0,
-        lastShot: 0
+        lastShot: 0,
+        eatenCount: 0 // 追加: NPC捕食数
     };
 
     let foods = [];
@@ -179,6 +180,7 @@ function initDekaUnchi() {
         player.y = mapHeight / 2;
         player.img = createPoopImage(selectedPoop);
         player.lastShot = 0;
+        player.eatenCount = 0; // 初期化
 
         foods = [];
         for (let i = 0; i < 400; i++) {
@@ -352,6 +354,10 @@ function initDekaUnchi() {
         frameCount++;
 
         updateRankingDisplay();
+        
+        // アチーブメント判定: サイズ
+        if (player.size >= 100) unlockAchievement("deka_100");
+        if (player.size >= 300) unlockAchievement("deka_300");
 
         // --- プレイヤー ---
         const targetX = mouseX - dekaCanvas.width / 2;
@@ -657,6 +663,10 @@ function initDekaUnchi() {
                     player.size += npc.size * 0.2;
                     npcs.splice(i, 1);
                     playSound("reveal-sound");
+                    
+                    // アチーブメント: おなかいっぱい
+                    player.eatenCount++;
+                    if (player.eatenCount >= 10) unlockAchievement("deka_eat10");
 
                     const otherPoops = poops.filter(p => p.name !== player.poopData.name);
                     spawnNPC(otherPoops, true);
@@ -679,6 +689,10 @@ function initDekaUnchi() {
         if (bgm) bgm.pause();
         playSound("timeup-sound");
         gameClearOverlay.style.display = "flex";
+
+        // アチーブメント
+        unlockAchievement("deka_master");
+        if (currentDifficulty === 'easy') unlockAchievement("deka_clear_easy");
     }
 
     function gameOver() {

@@ -1,13 +1,16 @@
 /* main.js: メインエントリーポイント */
 
 document.addEventListener("DOMContentLoaded", () => {
+    // ランク機能の初期化
+    initRank();
+    
     // 各ゲームの初期化関数を呼び出し
     initGacha();
     initShinken();
     initExplosion();
     initDekaUnchi();
-    initHayaoshi(); // 追加
-    initBazooka(); // 追加
+    initHayaoshi(); 
+    initBazooka(); 
 
     // トップ画面のうんち表示
     const startPoopContainer = document.getElementById("start-poop-container");

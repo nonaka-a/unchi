@@ -58,6 +58,11 @@ function initShinken() {
         shinkenMessage.textContent = 'キャッチせいこう!!';
         shinkenMessage.style.color = '#FFD700'; // 金色で見やすく
         playSound("reveal-sound");
+        
+        // アチーブメント
+        unlockAchievement("shinken_catch");
+        if (currentDropSpeed === 0.5) unlockAchievement("shinken_normal");
+        if (currentDropSpeed === 0.3) unlockAchievement("shinken_fast");
 
         setTimeout(resetShinkenUI, 2000);
     }

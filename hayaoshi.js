@@ -37,9 +37,10 @@ function initHayaoshi() {
         1: { time: 1500 },
         2: { time: 1000 },
         3: { time: 800 },
-        4: { time: 500 }
+        4: { time: 500 },
+        5: { time: 450 }
     };
-    const MAX_LEVEL = 4;
+    const MAX_LEVEL = 5;
     const TIME_LIMIT = 15; // 制限時間（秒）
     const SCORE_THRESHOLD = 20; // 各レベルで必要なスコア
     const MAX_MISS = 5; // おてつき許容回数
@@ -323,6 +324,13 @@ function initHayaoshi() {
 
     function levelClear() {
         stopGame();
+
+        // アチーブメント
+        if (gameState.level === 1) unlockAchievement("haya_lv1");
+        if (gameState.level === 2) unlockAchievement("haya_lv2");
+        if (gameState.level === 3) unlockAchievement("haya_lv3");
+        if (gameState.level === 4) unlockAchievement("haya_lv4");
+        if (gameState.level === 5) unlockAchievement("haya_lv5");
         
         if (resultOverlay) {
             resultOverlay.style.display = "flex";
@@ -333,7 +341,6 @@ function initHayaoshi() {
             }
             
             // クリア時は「そのレベルのスコア」を表示
-            // まだ合計には加算していない（次のレベルへ進むボタンを押した時に加算）
             if (finalScoreSpan) {
                 finalScoreSpan.textContent = "スコア: " + gameState.currentLevelScore;
             }

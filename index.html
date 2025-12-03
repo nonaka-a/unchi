@@ -48,7 +48,28 @@
                 <button id="bazooka-button" class="start-button">うんち たいほう</button>
 
                 <button id="zukan-button" class="zukan-button">うんち ずかん</button>
+                <!-- 追加 -->
+                <button id="rank-button" class="start-button" style="background-color: #1976D2; color: #FFFFFF;">ウンチーランク</button>
                 <button id="how-to-play-btn" class="start-button">あそびかた</button>
+            </div>
+        </div>
+
+        <!-- ランク画面 (追加) -->
+        <div id="rank-container" style="display: none;">
+            <button id="back-to-title-from-rank">↩</button>
+            <div class="rank-left-col">
+                <div id="rank-current-level">ランク 12</div>
+                <div id="rank-current-icon" class="rank-poop-icon"></div>
+                <h2 id="rank-current-name">うんち みならい</h2>
+                <div class="rank-score-box">
+                    <span>獲得ウンチー</span>
+                    <span id="rank-score-value">0</span>
+                </div>
+            </div>
+            <div class="rank-right-col">
+                <h3>たっせい リスト</h3>
+                <div id="rank-list"></div>
+                <button id="reset-rank-btn" class="play-again-button" style="margin-top: 10px; font-size: 14px; padding: 10px;">リストのリセット</button>
             </div>
         </div>
 
@@ -285,6 +306,12 @@
                 <h3><span class="instruction-icon" data-poop-idx="5"></span> うんち たいほう</h3>
                 <p>ドラッグで 角度と つよを きめて、たいほうから うんちを はっしゃ！<br> トイレに うまく 入れば クリア！<br>キミは じょうずに ながせるかな？</p>
             </div>
+            
+            <!-- 追加 -->
+            <div class="game-instruction">
+                <h3>🏆 ウンチーランク</h3>
+                <p>ゲームを 遊んで 条件を 達成すると「ウンチー」が もらえるよ！<br>ウンチーを ためて ランクアップ！<br>さいこうランク「うんち マスター」を めざそう！</p>
+            </div>
         </div>
     </div>
 
@@ -298,6 +325,7 @@
 
     <script src="data.js"></script>
     <script src="utils.js"></script>
+    <script src="rank.js"></script> <!-- 追加 -->
     <script src="gacha.js"></script>
     <script src="shinken.js"></script>
     <script src="explosion.js"></script>

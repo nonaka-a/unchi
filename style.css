@@ -131,17 +131,18 @@ body {
 }
 
 /* トップ画面の各ゲームボタンの色設定 */
-#shinken-button { background-color: #d32f2f; }
-#shinken-button:hover { background-color: #b71c1c; }
+#shinken-button { background-color: #29B6F6; }
+#shinken-button:hover { background-color: #0288D1; }
 
-#explosion-button { background-color: #ff9800; }
-#explosion-button:hover { background-color: #f57c00; }
+#explosion-button { background-color: #f44336; }
+#explosion-button:hover { background-color: #d32f2f; }
 
-#hayaoshi-button { background-color: #03A9F4; }
-#hayaoshi-button:hover { background-color: #0288d1; }
+#hayaoshi-button { background-color: #FF9800; }
+#hayaoshi-button:hover { background-color: #F57C00; }
 
 #deka-unchi-button { background-color: #9c27b0; }
 #deka-unchi-button:hover { background-color: #7b1fa2; }
+
 
 #game-container,
 #zukan-container,
@@ -403,7 +404,7 @@ h1 {
     to { transform: scale(1) }
 }
 
-/* しんけんしらうんちどり */
+/* しんけん しらうんちどり */
 #shinken-field {
     position: relative;
     height: 250px;
@@ -1054,12 +1055,13 @@ h1 {
     align-items: center;
 }
 
-/* バズーカ */
+/* バズーカ (たいほう): #29B6F6 -> #616161 (ダークグレー) */
 #bazooka-button {
-    background-color: #558B2F;
+    background-color: #616161;
 }
 
-#bazooka-button:hover { background-color: #33691E; }
+
+#bazooka-button:hover { background-color: #424242; }
 
 #bazooka-container {
     display: none;
@@ -1229,4 +1231,248 @@ h1 {
 .instruction-icon svg {
     width: 100%;
     height: 100%;
+}
+
+/* ウンチーランク */
+#rank-button {
+    /* HTML側でインラインスタイル設定済みだが、ホバー用 */
+}
+#rank-button:hover {
+    background-color: #1565C0 !important; /* 元の色 #1976D2 より少し暗い色 */
+}
+
+#rank-container {
+    display: none;
+    height: 80vh; /* 高さ固定 */
+    position: relative;
+    flex-direction: row; /* 左右配置 */
+    gap: 20px;
+    align-items: stretch;
+    background-color: #FFF3E0;
+    overflow: hidden;
+}
+
+#back-to-title-from-rank {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: var(--brown);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.rank-left-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    min-width: 200px;
+}
+
+.rank-poop-icon {
+    font-size: 100px;
+    margin: 20px 0;
+    height: 100px;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#rank-current-level {
+    font-size: 20px;
+    font-weight: bold;
+    color: #795548;
+}
+
+#rank-current-name {
+    font-size: 24px;
+    margin: 10px 0 20px;
+    text-shadow: 1px 1px 0 #fff;
+}
+
+.rank-score-box {
+    background: #3E2723;
+    color: #FFD700;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#rank-score-value {
+    font-size: 32px;
+}
+
+.rank-right-col {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 15px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.rank-right-col h3 {
+    text-align: center;
+    color: #5D4037;
+    margin: 10px 0;
+    border-bottom: 2px dashed #D7CCC8;
+    padding-bottom: 5px;
+}
+
+#rank-list {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+/* スクロールバー装飾 */
+#rank-list::-webkit-scrollbar {
+    width: 8px;
+}
+#rank-list::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    border-radius: 4px;
+}
+#rank-list::-webkit-scrollbar-thumb {
+    background: #8D6E63; 
+    border-radius: 4px;
+}
+
+.rank-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    border: 2px solid #EEE;
+    transition: all 0.2s;
+}
+
+.rank-list-item.locked {
+    background-color: #F5F5F5;
+    color: #AAA;
+    border-color: #EEE;
+}
+
+/* 達成済み・未回収（黄色） */
+.rank-list-item.unlocked {
+    background-color: #FFF59D; /* 濃いめの黄色 */
+    border-color: #FBC02D;
+    color: #3E2723;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    transform: scale(1.02);
+    animation: pulse-yellow 2s infinite;
+}
+
+/* 回収済み（オレンジ） */
+.rank-list-item.claimed {
+    background-color: #FFCC80; /* オレンジ */
+    border-color: #FF9800;
+    color: #3E2723;
+    box-shadow: none;
+    transform: scale(1.0);
+    opacity: 0.9;
+}
+
+@keyframes pulse-yellow {
+    0% { box-shadow: 0 0 0 0 rgba(253, 216, 53, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(253, 216, 53, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(253, 216, 53, 0); }
+}
+
+.rank-item-info {
+    text-align: left;
+}
+
+.rank-item-title {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.rank-item-desc {
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+.rank-item-points {
+    font-weight: bold;
+    font-size: 18px;
+    color: #FF9800;
+    min-width: 50px;
+    text-align: right;
+}
+
+/* 回収済みなら色を変える */
+.rank-list-item.claimed .rank-item-points {
+    color: #E65100;
+}
+
+.rank-list-item.locked .rank-item-points {
+    color: #AAA;
+}
+
+@media (max-width: 600px) {
+    #rank-container {
+        flex-direction: column;
+        height: 90vh;
+        overflow-y: auto;
+    }
+    .rank-left-col, .rank-right-col {
+        width: 100%;
+        min-height: auto;
+    }
+    .rank-left-col {
+        padding: 10px;
+    }
+}
+
+/* style.css の末尾に追加 */
+
+/* ランクアップ演出：シェイク */
+@keyframes rankUpShake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+    20%, 40%, 60%, 80% { transform: translateX(10px); }
+}
+
+.rank-up-shake {
+    animation: rankUpShake 0.8s cubic-bezier(.36,.07,.19,.97) both;
+    /* 背景色を一瞬明るくする */
+    background-color: #FFF9C4 !important; 
+    transition: background-color 0.5s;
+}
+
+/* 紙吹雪 */
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    opacity: 0.8;
+    z-index: 200;
+    pointer-events: none;
+    animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(80vh) rotate(720deg); opacity: 0; }
 }
