@@ -289,6 +289,7 @@ function initDekaUnchi() {
     }
 
     function resizeCanvas() {
+        // コンテナのサイズに合わせる
         dekaCanvas.width = window.innerWidth;
         dekaCanvas.height = window.innerHeight;
     }
@@ -743,22 +744,26 @@ function initDekaUnchi() {
         ctx.save();
         ctx.translate(-cameraX, -cameraY);
 
-        // 背景
+        // 背景グリッド
         ctx.strokeStyle = "#ddd";
         ctx.lineWidth = 1;
         const gridSize = 50;
+        // 描画範囲の最適化（画面外を描画しない）
         const startX = Math.floor(cameraX / gridSize) * gridSize;
         const startY = Math.floor(cameraY / gridSize) * gridSize;
-        for (let x = startX; x < cameraX + dekaCanvas.width + gridSize; x += gridSize) {
+        const endX = startX + dekaCanvas.width + gridSize;
+        const endY = startY + dekaCanvas.height + gridSize;
+
+        for (let x = startX; x < endX; x += gridSize) {
             ctx.beginPath();
-            ctx.moveTo(x, cameraY);
-            ctx.lineTo(x, cameraY + dekaCanvas.height + gridSize);
+            ctx.moveTo(x, Math.max(0, cameraY));
+            ctx.lineTo(x, Math.min(mapHeight, cameraY + dekaCanvas.height));
             ctx.stroke();
         }
-        for (let y = startY; y < cameraY + dekaCanvas.height + gridSize; y += gridSize) {
+        for (let y = startY; y < endY; y += gridSize) {
             ctx.beginPath();
-            ctx.moveTo(cameraX, y);
-            ctx.lineTo(cameraX + dekaCanvas.width + gridSize, y);
+            ctx.moveTo(Math.max(0, cameraX), y);
+            ctx.lineTo(Math.min(mapWidth, cameraX + dekaCanvas.width), y);
             ctx.stroke();
         }
 
@@ -769,6 +774,10 @@ function initDekaUnchi() {
 
         // エサ
         foods.forEach(f => {
+            // 画面内判定（簡易）
+            if (f.x < cameraX - 50 || f.x > cameraX + dekaCanvas.width + 50 ||
+                f.y < cameraY - 50 || f.y > cameraY + dekaCanvas.height + 50) return;
+
             ctx.beginPath();
             ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
             ctx.fillStyle = f.color;
@@ -785,16 +794,24 @@ function initDekaUnchi() {
 
         // NPC
         npcs.forEach(npc => {
+            // 画面内判定
+            if (npc.x < cameraX - npc.size || npc.x > cameraX + dekaCanvas.width + npc.size ||
+                npc.y < cameraY - npc.size || npc.y > cameraY + dekaCanvas.height + npc.size) return;
+
             ctx.save();
             ctx.translate(npc.x, npc.y);
+            
+            // 画像描画チェックとフォールバック
             if (npc.img && npc.img.complete && npc.img.naturalWidth > 0) {
-                ctx.drawImage(npc.img, -npc.size, -npc.size, npc.size * 2, npc.size * 2);
+                try {
+                    ctx.drawImage(npc.img, -npc.size, -npc.size, npc.size * 2, npc.size * 2);
+                } catch (e) {
+                    drawSimplePoop(ctx, npc.size, npc.poopData.color);
+                }
             } else {
-                ctx.beginPath();
-                ctx.arc(0, 0, npc.size, 0, Math.PI * 2);
-                ctx.fillStyle = npc.poopData.color;
-                ctx.fill();
+                drawSimplePoop(ctx, npc.size, npc.poopData.color);
             }
+            
             ctx.fillStyle = "#555";
             ctx.font = "12px Arial";
             ctx.textAlign = "center";
@@ -806,12 +823,13 @@ function initDekaUnchi() {
         ctx.save();
         ctx.translate(player.x, player.y);
         if (player.img && player.img.complete && player.img.naturalWidth > 0) {
-            ctx.drawImage(player.img, -player.size, -player.size, player.size * 2, player.size * 2);
+            try {
+                ctx.drawImage(player.img, -player.size, -player.size, player.size * 2, player.size * 2);
+            } catch (e) {
+                drawSimplePoop(ctx, player.size, player.poopData ? player.poopData.color : player.color);
+            }
         } else {
-            ctx.beginPath();
-            ctx.arc(0, 0, player.size, 0, Math.PI * 2);
-            ctx.fillStyle = player.poopData ? player.poopData.color : player.color;
-            ctx.fill();
+            drawSimplePoop(ctx, player.size, player.poopData ? player.poopData.color : player.color);
         }
         ctx.fillStyle = "#000";
         ctx.font = "bold 16px Arial";
@@ -826,6 +844,13 @@ function initDekaUnchi() {
         ctx.font = "bold 24px Arial";
         ctx.textAlign = "center";
         ctx.fillText(`大きさ: ${Math.floor(player.size)} / 500`, dekaCanvas.width / 2, 50);
+    }
+
+    function drawSimplePoop(ctx, size, color) {
+        ctx.beginPath();
+        ctx.arc(0, 0, size, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
     }
 
     function animate() {
