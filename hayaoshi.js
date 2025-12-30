@@ -322,7 +322,7 @@ function initHayaoshi() {
         }
     }
 
-    function levelClear() {
+  function levelClear() {
         stopGame();
 
         // アチーブメント
@@ -332,67 +332,87 @@ function initHayaoshi() {
         if (gameState.level === 4) unlockAchievement("haya_lv4");
         if (gameState.level === 5) unlockAchievement("haya_lv5");
         
-        if (resultOverlay) {
-            resultOverlay.style.display = "flex";
-            
-            if (resultTitle) {
-                resultTitle.textContent = "クリア！";
-                resultTitle.style.color = "#FFD700"; 
-            }
-            
-            // クリア時は「そのレベルのスコア」を表示
-            if (finalScoreSpan) {
-                finalScoreSpan.textContent = "スコア: " + gameState.currentLevelScore;
-            }
-
-            if (gameState.level < MAX_LEVEL) {
-                if (nextLevelBtn) {
-                    nextLevelBtn.style.display = "block";
-                    nextLevelBtn.textContent = "レベル " + (gameState.level + 1) + " へ";
-                }
-            } else {
-                // 全クリ時はその場で合算して表示
-                gameState.totalScore += gameState.currentLevelScore;
-                if (resultTitle) resultTitle.textContent = "ぜんくりあ！";
-                if (finalScoreSpan) {
-                    finalScoreSpan.textContent = "ごうけい: " + gameState.totalScore;
-                }
-                // 次へボタンは出さない
-                if (nextLevelBtn) nextLevelBtn.style.display = "none";
-            }
-            
-            if (restartBtn) restartBtn.style.display = "block";
-            if (titleBtn) titleBtn.style.display = "block";
+        // 変更: 「おわり！」を表示して2秒待つ
+        if (countdownOverlay && countdownText) {
+            countdownOverlay.style.display = "flex";
+            countdownText.textContent = "おわり！";
         }
-        playSound("timeup-sound"); 
+
+        setTimeout(() => {
+            if (countdownOverlay) countdownOverlay.style.display = "none";
+
+            if (resultOverlay) {
+                resultOverlay.style.display = "flex";
+                
+                if (resultTitle) {
+                    resultTitle.textContent = "クリア！";
+                    resultTitle.style.color = "#FFD700"; 
+                }
+                
+                // クリア時は「そのレベルのスコア」を表示
+                if (finalScoreSpan) {
+                    finalScoreSpan.textContent = "スコア: " + gameState.currentLevelScore;
+                }
+
+                if (gameState.level < MAX_LEVEL) {
+                    if (nextLevelBtn) {
+                        nextLevelBtn.style.display = "block";
+                        nextLevelBtn.textContent = "レベル " + (gameState.level + 1) + " へ";
+                    }
+                } else {
+                    // 全クリ時はその場で合算して表示
+                    gameState.totalScore += gameState.currentLevelScore;
+                    if (resultTitle) resultTitle.textContent = "ぜんくりあ！";
+                    if (finalScoreSpan) {
+                        finalScoreSpan.textContent = "ごうけい: " + gameState.totalScore;
+                    }
+                    // 次へボタンは出さない
+                    if (nextLevelBtn) nextLevelBtn.style.display = "none";
+                }
+                
+                if (restartBtn) restartBtn.style.display = "block";
+                if (titleBtn) titleBtn.style.display = "block";
+            }
+            playSound("timeup-sound"); 
+        }, 2000);
     }
 
     function gameOver(reason) {
         stopGame();
 
-        // ゲームオーバー時は、今までの合計 + 今回のレベルのスコアを表示
-        const currentTotal = gameState.totalScore + gameState.currentLevelScore;
-
-        if (resultOverlay) {
-            resultOverlay.style.display = "flex";
-            
-            if (finalScoreSpan) {
-                finalScoreSpan.textContent = "ごうけい: " + currentTotal;
-            }
-
-            if (resultTitle) {
-                if (reason === "score_low") {
-                    resultTitle.textContent = "スコア不足...";
-                } else {
-                    resultTitle.textContent = "ゲームオーバー";
-                }
-                resultTitle.style.color = "#f44336";
-            }
-
-            if (retryBtn) retryBtn.style.display = "block";
-            if (restartBtn) restartBtn.style.display = "block";
-            if (titleBtn) titleBtn.style.display = "block";
+        // 変更: 「おわり！」を表示して2秒待つ
+        if (countdownOverlay && countdownText) {
+            countdownOverlay.style.display = "flex";
+            countdownText.textContent = "おわり！";
         }
-        playSound("incorrect-sound"); 
+
+        setTimeout(() => {
+            if (countdownOverlay) countdownOverlay.style.display = "none";
+
+            // ゲームオーバー時は、今までの合計 + 今回のレベルのスコアを表示
+            const currentTotal = gameState.totalScore + gameState.currentLevelScore;
+
+            if (resultOverlay) {
+                resultOverlay.style.display = "flex";
+                
+                if (finalScoreSpan) {
+                    finalScoreSpan.textContent = "ごうけい: " + currentTotal;
+                }
+
+                if (resultTitle) {
+                    if (reason === "score_low") {
+                        resultTitle.textContent = "スコア不足...";
+                    } else {
+                        resultTitle.textContent = "ゲームオーバー";
+                    }
+                    resultTitle.style.color = "#f44336";
+                }
+
+                if (retryBtn) retryBtn.style.display = "block";
+                if (restartBtn) restartBtn.style.display = "block";
+                if (titleBtn) titleBtn.style.display = "block";
+            }
+            playSound("incorrect-sound"); 
+        }, 2000);
     }
 }

@@ -117,7 +117,7 @@ function initExplosion() {
         }
     }
 
-    function finishGame() {
+        function finishGame() {
         isActive = false;
         clearInterval(timerInterval);
         playSound("timeup-sound");
@@ -128,13 +128,22 @@ function initExplosion() {
         if (totalCount >= 500) unlockAchievement("exp_500");
         if (totalCount >= 1000) unlockAchievement("exp_1000");
 
-        // 結果表示
-        finalScoreDisplay.textContent = totalCount;
-        resultOverlay.style.display = "flex";
+        // 変更: 「おわり！」を表示して2秒待つ
+        countdownDisplay.style.display = "block";
+        countdownDisplay.textContent = "おわり！";
 
-        // 入力欄にフォーカス
-        setTimeout(() => nameInput.focus(), 100);
+        setTimeout(() => {
+            countdownDisplay.style.display = "none";
+            
+            // 結果表示
+            finalScoreDisplay.textContent = totalCount;
+            resultOverlay.style.display = "flex";
+
+            // 入力欄にフォーカス
+            setTimeout(() => nameInput.focus(), 100);
+        }, 2000);
     }
+
 
     function getSpawnCount() {
         if (totalCount >= 100) return 3;
