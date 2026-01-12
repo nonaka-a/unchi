@@ -158,7 +158,7 @@ function initDekaUnchi() {
 
     function startGame(selectedPoop, difficulty) {
         currentDifficulty = difficulty;
-        difficultyScreen.style.display = "none";
+        dekaSelectionScreen.style.display = "none";
         dekaGameScreen.style.display = "block";
         gameOverOverlay.style.display = "none";
         gameClearOverlay.style.display = "none";
@@ -182,6 +182,11 @@ function initDekaUnchi() {
         player.lastShot = 0;
         player.eatenCount = 0; // 初期化
 
+        // カメラの初期座標を設定（UIだけで描画されない問題の対策）
+        resizeCanvas();
+        cameraX = player.x - dekaCanvas.width / 2;
+        cameraY = player.y - dekaCanvas.height / 2;
+
         foods = [];
         for (let i = 0; i < 400; i++) {
             spawnFood();
@@ -204,11 +209,11 @@ function initDekaUnchi() {
         frameCount = 0;
         isPaused = false;
 
-        resizeCanvas();
-        window.addEventListener("resize", resizeCanvas);
-        dekaCanvas.addEventListener("mousemove", handleInput);
-        dekaCanvas.addEventListener("touchmove", handleInput, { passive: false });
-
+        // 既存のアニメーションループを確実に停止させてから開始
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
         animate();
     }
 
@@ -355,7 +360,7 @@ function initDekaUnchi() {
         frameCount++;
 
         updateRankingDisplay();
-        
+
         // アチーブメント判定: サイズ
         if (player.size >= 100) unlockAchievement("deka_100");
         if (player.size >= 300) unlockAchievement("deka_300");
@@ -664,7 +669,7 @@ function initDekaUnchi() {
                     player.size += npc.size * 0.2;
                     npcs.splice(i, 1);
                     playSound("reveal-sound");
-                    
+
                     // アチーブメント: おなかいっぱい
                     player.eatenCount++;
                     if (player.eatenCount >= 10) unlockAchievement("deka_eat10");
@@ -740,7 +745,10 @@ function initDekaUnchi() {
         if (!isPaused) return;
         isPaused = false;
         pauseOverlay.style.display = "none";
-        animate();
+        // すでにループが走っていないか確認してから再開
+        if (!animationId) {
+            animate();
+        }
     }
 
     function draw() {
@@ -804,7 +812,7 @@ function initDekaUnchi() {
 
             ctx.save();
             ctx.translate(npc.x, npc.y);
-            
+
             // 画像描画チェックとフォールバック
             if (npc.img && npc.img.complete && npc.img.naturalWidth > 0) {
                 try {
@@ -815,7 +823,7 @@ function initDekaUnchi() {
             } else {
                 drawSimplePoop(ctx, npc.size, npc.poopData.color);
             }
-            
+
             ctx.fillStyle = "#555";
             ctx.font = "12px Arial";
             ctx.textAlign = "center";
@@ -858,11 +866,19 @@ function initDekaUnchi() {
     }
 
     function animate() {
-        if (dekaGameScreen.style.display === "none") return;
+        if (dekaGameScreen.style.display === "none" || isPaused) {
+            animationId = null;
+            return;
+        }
         update();
         draw();
         animationId = requestAnimationFrame(animate);
     }
+
+    // イベントリスナーの登録（initDekaUnchi 内で一度だけ行う）
+    window.addEventListener("resize", resizeCanvas);
+    dekaCanvas.addEventListener("mousemove", handleInput);
+    dekaCanvas.addEventListener("touchmove", handleInput, { passive: false });
 
     // イベントリスナー
     if (dekaUnchiButton) {
