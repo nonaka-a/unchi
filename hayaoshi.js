@@ -18,11 +18,11 @@ function initHayaoshi() {
     const levelTitle = document.getElementById("hayaoshi-level-title");
     const countdownOverlay = document.getElementById("hayaoshi-countdown-overlay");
     const countdownText = document.getElementById("hayaoshi-countdown-text");
-    
+
     const resultOverlay = document.getElementById("hayaoshi-result-overlay");
     const finalScoreSpan = document.getElementById("hayaoshi-final-score");
     const resultTitle = document.getElementById("hayaoshi-result-title");
-    
+
     // Result Buttons
     const nextLevelBtn = document.getElementById("hayaoshi-next-level");
     const retryBtn = document.getElementById("hayaoshi-retry");
@@ -37,8 +37,8 @@ function initHayaoshi() {
         1: { time: 1500 },
         2: { time: 1000 },
         3: { time: 800 },
-        4: { time: 500 },
-        5: { time: 450 }
+        4: { time: 550 },
+        5: { time: 480 }
     };
     const MAX_LEVEL = 5;
     const TIME_LIMIT = 15; // 制限時間（秒）
@@ -116,10 +116,10 @@ function initHayaoshi() {
 
     function startLevel(level) {
         if (level > MAX_LEVEL) level = MAX_LEVEL;
-        
+
         gameState.level = level;
         gameState.currentLevelScore = 0; // 新しいレベルなので0から
-        gameState.miss = 0; 
+        gameState.miss = 0;
         gameState.timeLeft = TIME_LIMIT;
         gameState.lastSec = TIME_LIMIT;
         gameState.isPlaying = false;
@@ -149,7 +149,7 @@ function initHayaoshi() {
     function renderGrid() {
         if (!gridContainer) return;
         gridContainer.innerHTML = "";
-        
+
         if (typeof poops === 'undefined' || !Array.isArray(poops)) {
             gridContainer.textContent = "データエラー";
             return;
@@ -158,7 +158,7 @@ function initHayaoshi() {
         poops.forEach((poop, index) => {
             const item = document.createElement("div");
             item.className = "hayaoshi-item";
-            
+
             const icon = document.createElement("div");
             icon.className = "hayaoshi-icon";
             setPoopStyle(icon, poop);
@@ -179,7 +179,7 @@ function initHayaoshi() {
         if (levelOverlay && levelTitle) {
             levelOverlay.style.display = "flex";
             levelTitle.textContent = "レベル " + gameState.level;
-            
+
             setTimeout(() => {
                 levelOverlay.style.display = "none";
                 startCountdown();
@@ -227,11 +227,11 @@ function initHayaoshi() {
 
             const elapsed = (Date.now() - startTime) / 1000;
             const remaining = Math.max(0, TIME_LIMIT - elapsed);
-            
+
             const currentSec = Math.ceil(remaining);
 
             gameState.timeLeft = remaining;
-            
+
             if (timerDisplay) timerDisplay.textContent = currentSec;
 
             if (currentSec < gameState.lastSec && currentSec <= 3 && currentSec > 0) {
@@ -284,7 +284,7 @@ function initHayaoshi() {
         if (index === gameState.activePoopIndex) {
             gameState.currentLevelScore++;
             if (scoreDisplay) scoreDisplay.textContent = gameState.currentLevelScore;
-            playSound("catch-sound"); 
+            playSound("catch-sound");
             activateRandomPoop();
         } else {
             handleMiss(element);
@@ -307,7 +307,7 @@ function initHayaoshi() {
     function stopGame() {
         gameState.isPlaying = false;
         clearInterval(gameState.timerInterval);
-        if (timeoutId) { 
+        if (timeoutId) {
             clearTimeout(timeoutId);
             timeoutId = null;
         }
@@ -322,7 +322,7 @@ function initHayaoshi() {
         }
     }
 
-  function levelClear() {
+    function levelClear() {
         stopGame();
 
         // アチーブメント
@@ -331,7 +331,7 @@ function initHayaoshi() {
         if (gameState.level === 3) unlockAchievement("haya_lv3");
         if (gameState.level === 4) unlockAchievement("haya_lv4");
         if (gameState.level === 5) unlockAchievement("haya_lv5");
-        
+
         // 変更: 「おわり！」を表示して2秒待つ
         if (countdownOverlay && countdownText) {
             countdownOverlay.style.display = "flex";
@@ -343,12 +343,12 @@ function initHayaoshi() {
 
             if (resultOverlay) {
                 resultOverlay.style.display = "flex";
-                
+
                 if (resultTitle) {
                     resultTitle.textContent = "クリア！";
-                    resultTitle.style.color = "#FFD700"; 
+                    resultTitle.style.color = "#FFD700";
                 }
-                
+
                 // クリア時は「そのレベルのスコア」を表示
                 if (finalScoreSpan) {
                     finalScoreSpan.textContent = "スコア: " + gameState.currentLevelScore;
@@ -369,11 +369,11 @@ function initHayaoshi() {
                     // 次へボタンは出さない
                     if (nextLevelBtn) nextLevelBtn.style.display = "none";
                 }
-                
+
                 if (restartBtn) restartBtn.style.display = "block";
                 if (titleBtn) titleBtn.style.display = "block";
             }
-            playSound("timeup-sound"); 
+            playSound("timeup-sound");
         }, 2000);
     }
 
@@ -394,7 +394,7 @@ function initHayaoshi() {
 
             if (resultOverlay) {
                 resultOverlay.style.display = "flex";
-                
+
                 if (finalScoreSpan) {
                     finalScoreSpan.textContent = "ごうけい: " + currentTotal;
                 }
@@ -412,7 +412,7 @@ function initHayaoshi() {
                 if (restartBtn) restartBtn.style.display = "block";
                 if (titleBtn) titleBtn.style.display = "block";
             }
-            playSound("incorrect-sound"); 
+            playSound("incorrect-sound");
         }, 2000);
     }
 }
